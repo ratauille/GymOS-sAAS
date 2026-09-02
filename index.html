@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GymOS Luxury Edition - Plataforma web de rendimiento físico, nutrición de alta precisión y gestión de clientes élite.">
+  <meta name="theme-color" content="#0F2C59">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>GymOS | Elite Performance & Precision Nutrition</title>
+
+  <!-- PWA Manifest Link -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%230F2C59' rx='100'/%3E%3Cpath fill='%23FFFFFF' d='M160 160h192v48H160zm0 96h192v48H160zm0 96h120v48H160z'/%3E%3C/svg%3E">
+  
+  <!-- Google Fonts: Belleza & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Belleza&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Application CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Supabase JS Client SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+
+  <!-- PayPal Checkout SDK (Sandbox Demo) -->
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
+</head>
+<body>
+
+  <!-- TOP BAR & BRANDING NAVIGATION -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="brand">
+        <span class="brand-badge">GO</span>
+        <div class="brand-text">
+          <span class="brand-title">GymOS</span>
+          <span class="brand-sub">LUXURY PERFORMANCE</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <button class="nav-btn active" data-target="section-dashboard">
+          <i class="fa-solid fa-chart-line"></i> Dashboard CRM
+        </button>
+        <button class="nav-btn" data-target="section-coach-shell">
+          <i class="fa-solid fa-terminal"></i> Terminal Coach Shell
+        </button>
+        <button class="nav-btn" data-target="section-nutrition">
+          <i class="fa-solid fa-utensils"></i> Motor Nutricional
+        </button>
+        <button class="nav-btn" data-target="section-workout">
+          <i class="fa-solid fa-dumbbell"></i> Rutina & Biomecánica
+        </button>
+        <button class="nav-btn" data-target="section-leads">
+          <i class="fa-solid fa-users"></i> CRM Leads
+        </button>
+        <button class="nav-btn" data-target="section-checkout">
+          <i class="fa-solid fa-credit-card"></i> Membresías Élite
+        </button>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-outline" id="openLeadModalBtn">
+          <i class="fa-solid fa-crown"></i> Captar Lead Élite
+        </button>
+        <button class="btn btn-primary" id="openCheckoutNavBtn">
+          <i class="fa-brands fa-paypal"></i> Adquirir Plan
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="main-content">
+
+    <!-- CINEMATIC MOTIVATIONAL HERO -->
+    <section class="hero-cinematic">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <span class="hero-tag"><i class="fa-solid fa-sparkles"></i> INGENIERÍA DE RENDIMIENTO HUMANO</span>
+        
+        <!-- Motivational Phrases Carousel (Fade In / Fade Out) -->
+        <div class="quote-carousel" id="quoteCarousel">
+          <div class="quote-item active">
+            <h1 class="quote-text">"La excelencia no es un acto aislado, sino la armonía perfecta entre nutrición exacta y movimiento biomecánico impecable."</h1>
+            <p class="quote-author">— GYMOS ELITE PHILOSOPHY</p>
+          </div>
+          <div class="quote-item">
+            <h1 class="quote-text">"Transforma datos biométricos en resultados esculpidos con precisión científica y disciplina inquebrantable."</h1>
+            <p class="quote-author">— ARCHITECTURE OF BODY & MIND</p>
+          </div>
+          <div class="quote-item">
+            <h1 class="quote-text">"El lujo supremo es el control total sobre tu metabolismo, fuerza y longevidad física."</h1>
+            <p class="quote-author">— HIGH PERFORMANCE LIFESTYLE</p>
+          </div>
+          <div class="quote-item">
+            <h1 class="quote-text">"Diseña tu cuerpo con la misma elegancia y rigor con que los grandes maestros construyen el arte."</h1>
+            <p class="quote-author">— BIOMECHANICAL PERFECTION</p>
+          </div>
+        </div>
+
+        <div class="hero-indicators" id="carouselIndicators">
+          <span class="indicator active" data-index="0"></span>
+          <span class="indicator" data-index="1"></span>
+          <span class="indicator" data-index="2"></span>
+          <span class="indicator" data-index="3"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: DASHBOARD & CONFRONTACIÓN DE LOGROS -->
+    <section id="section-dashboard" class="app-section active">
+      <div class="section-header">
+        <div>
+          <span class="section-subtitle">CONTROL BIOMÉTRICO & RETENCIÓN DE CLIENTES</span>
+          <h2 class="section-title">Panel de Confrontación de Logros</h2>
+        </div>
+        <div class="section-header-actions">
+          <button class="btn btn-outline" id="triggerReminderBtn">
+            <i class="fa-solid fa-bell"></i> Disparar Recordatorio Automático
+          </button>
+          <button class="btn btn-secondary" id="exportBackupBtn">
+            <i class="fa-solid fa-download"></i> Exportar Reporte CRM
+          </button>
+        </div>
+      </div>
+
+      <!-- METRIC CARDS -->
+      <div class="grid grid-4 gap-md mb-lg">
+        <div class="card metric-card">
+          <div class="metric-icon"><i class="fa-solid fa-weight-scale"></i></div>
+          <div class="metric-data">
+            <span class="metric-label">Peso Actual vs Meta</span>
+            <div class="metric-value-wrap">
+              <b class="metric-value" id="dashCurrentWeight">76.4</b> <small>kg</small>
+              <span class="metric-target">/ Meta <span id="dashTargetWeight">74.0</span> kg</span>
+            </div>
+            <div class="progress-bar-wrap mt-xs">
+              <div class="progress-bar-fill" id="weightProgressBar" style="width: 78%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="metric-icon"><i class="fa-solid fa-fire-flame-curved"></i></div>
+          <div class="metric-data">
+            <span class="metric-label">Objetivo Calórico (TDEE)</span>
+            <div class="metric-value-wrap">
+              <b class="metric-value" id="dashCalories">2,120</b> <small>kcal/día</small>
+            </div>
+            <span class="metric-sub" id="dashMacroSummary">172g P | 205g C | 60g G</span>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="metric-icon"><i class="fa-solid fa-dumbbell"></i></div>
+          <div class="metric-data">
+            <span class="metric-label">Adherencia de Entrenamiento</span>
+            <div class="metric-value-wrap">
+              <b class="metric-value" id="dashWorkoutAdherence">96%</b>
+              <span class="badge badge-success">Excelente</span>
+            </div>
+            <span class="metric-sub">4 de 4 semanas completadas</span>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="metric-icon"><i class="fa-solid fa-crown"></i></div>
+          <div class="metric-data">
+            <span class="metric-label">Estatus de Membresía</span>
+            <div class="metric-value-wrap">
+              <b class="metric-value text-cobalt" id="dashMembershipStatus">Plan Mensual Élite</b>
+            </div>
+            <span class="metric-sub text-emerald"><i class="fa-solid fa-circle-check"></i> Pago Activo por PayPal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- GOAL VS REAL PROGRESS COMPARISON MATRIX -->
+      <div class="grid grid-2 gap-lg mb-lg">
+        <!-- Comparative Progress Panel -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-bullseye text-cobalt"></i> Confrontación de Metas vs Progreso Real</h3>
+            <span class="badge badge-cobalt">Auditoría Semanal</span>
+          </div>
+          <div class="card-body">
+            <div class="comparison-row">
+              <div class="comp-col">
+                <span class="comp-label">Objetivo Inicial Declarado</span>
+                <span class="comp-value" id="compInitialGoal">Pérdida de Grasa & Preservación Muscular</span>
+              </div>
+              <div class="comp-col text-right">
+                <span class="comp-label">Ritmo de Cambio Recomendado</span>
+                <span class="comp-value text-cobalt">-0.5 kg / semana</span>
+              </div>
+            </div>
+
+            <hr class="divider">
+
+            <div class="stat-list">
+              <div class="stat-item">
+                <div class="stat-info">
+                  <span>Adherencia Calórica Diaria (Semana 4)</span>
+                  <b id="compCalorieAdherence">96%</b>
+                </div>
+                <div class="progress-bar-wrap">
+                  <div class="progress-bar-fill bg-cobalt" style="width: 96%;"></div>
+                </div>
+              </div>
+
+              <div class="stat-item">
+                <div class="stat-info">
+                  <span>Progreso de Cargas (Fuerza Relativa)</span>
+                  <b id="compStrengthProgress">+7.5 kg en Press Plano</b>
+                </div>
+                <div class="progress-bar-wrap">
+                  <div class="progress-bar-fill bg-cobalt" style="width: 88%;"></div>
+                </div>
+              </div>
+
+              <div class="stat-item">
+                <div class="stat-info">
+                  <span>Reducción de Cintura</span>
+                  <b id="compWaistProgress">-3.0 cm acumulados</b>
+                </div>
+                <div class="progress-bar-wrap">
+                  <div class="progress-bar-fill bg-cobalt" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert-box alert-info mt-md">
+              <i class="fa-solid fa-circle-info"></i>
+              <div>
+                <strong>Análisis Biométrico Automático:</strong> El cliente registra una recomposición corporal eficiente. Mantener déficit calórico e incrementar 2.5 kg en sentadilla/prensa la próxima semana.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Automated CRM Reminders & Follow-up Trigger Feed -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-clock-rotate-left text-cobalt"></i> Recordatorios Automáticos & Seguimiento</h3>
+            <span class="badge badge-gold">Retención Automatizada</span>
+          </div>
+          <div class="card-body">
+            <p class="text-muted fs-sm mb-md">Sistema visual de notificaciones automáticas para mantener al cliente comprometido y renovar su suscripción.</p>
+
+            <div class="reminder-feed" id="reminderFeed">
+              <div class="reminder-card active">
+                <div class="reminder-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                <div class="reminder-content">
+                  <div class="reminder-head">
+                    <b>Recordatorio de Pesaje Semanal</b>
+                    <span class="reminder-time">Hoy 08:00 AM</span>
+                  </div>
+                  <p>Solicitar registro de peso en ayunas y medida de cintura.</p>
+                  <button class="btn btn-xs btn-outline mt-xs send-reminder-btn" data-type="pesaje">
+                    <i class="fa-solid fa-paper-plane"></i> Enviar por WhatsApp / Email
+                  </button>
+                </div>
+              </div>
+
+              <div class="reminder-card">
+                <div class="reminder-icon"><i class="fa-solid fa-utensils"></i></div>
+                <div class="reminder-content">
+                  <div class="reminder-head">
+                    <b>Ajuste de Macronutrientes</b>
+                    <span class="reminder-time">En 2 días</span>
+                  </div>
+                  <p>Revisión semanal de tolerancia a hidratos y ajuste de gramaje en cena.</p>
+                  <button class="btn btn-xs btn-outline mt-xs send-reminder-btn" data-type="dieta">
+                    <i class="fa-solid fa-paper-plane"></i> Programar Alerta
+                  </button>
+                </div>
+              </div>
+
+              <div class="reminder-card">
+                <div class="reminder-icon"><i class="fa-solid fa-rotate"></i></div>
+                <div class="reminder-content">
+                  <div class="reminder-head">
+                    <b>Renovación de Membresía VIP</b>
+                    <span class="reminder-time">En 5 días</span>
+                  </div>
+                  <p>Enviar resumen de logros e informe de sobrecarga progresiva por PayPal Checkout.</p>
+                  <button class="btn btn-xs btn-outline mt-xs send-reminder-btn" data-type="renovacion">
+                    <i class="fa-solid fa-link"></i> Enviar Enlace PayPal
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION NEW: TERMINAL COACH SHELL (CLI EN INTERFAZ WEB) -->
+    <section id="section-coach-shell" class="app-section">
+      <div class="section-header">
+        <div>
+          <span class="section-subtitle">INTERFAZ DE CONTROL CLI & LOGROS POR TIEMPO</span>
+          <h2 class="section-title">Terminal Coach Shell Engine</h2>
+        </div>
+        <div class="section-header-actions">
+          <button class="btn btn-outline" id="shellHelpBtn">
+            <i class="fa-solid fa-circle-question"></i> Ayuda de Comandos
+          </button>
+          <button class="btn btn-primary" id="shellClearBtn">
+            <i class="fa-solid fa-eraser"></i> Limpiar Consola
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-3 gap-lg">
+        <!-- Terminal Console Container -->
+        <div class="card col-span-2 terminal-card">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <span class="terminal-title">GymOS Coach Interactive Shell v3.5 (bash / node)</span>
+          </div>
+          <div class="terminal-body" id="terminalOutput">
+            <div class="term-line term-intro">GymOS Coach Shell — Sistema de Prescripción & Logros Verificables</div>
+            <div class="term-line term-muted">Escriba 'help' o presione los botones de acceso rápido para ejecutar órdenes.</div>
+            <div class="term-line term-prompt">GymOS-Coach&gt; client select "Carlos Mendoza"</div>
+            <div class="term-line term-success">[ÉXITO] Cliente activo: Carlos Mendoza | Plan Mensual Élite</div>
+          </div>
+          <div class="terminal-input-row">
+            <span class="term-prompt-symbol">GymOS-Coach&gt;</span>
+            <input type="text" id="terminalInput" class="terminal-input-field" placeholder="Escriba un comando (ej: help, checkin add 76.4 85, achievements, diet)..." autocomplete="off">
+            <button class="btn btn-xs btn-primary" id="terminalSendBtn">
+              <i class="fa-solid fa-play"></i> Ejecutar
+            </button>
+          </div>
+        </div>
+
+        <!-- Coach Quick Command Actions & Unlocked Achievements -->
+        <div class="card col-span-1">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-terminal text-cobalt"></i> Botones de Comando</h3>
+          </div>
+          <div class="card-body">
+            <div class="grid grid-1 gap-xs mb-md">
+              <button class="btn btn-sm btn-outline shell-quick-btn" data-cmd="checkin list">
+                <i class="fa-solid fa-list-check"></i> Ver Check-ins por Tiempo
+              </button>
+              <button class="btn btn-sm btn-outline shell-quick-btn" data-cmd="achievements">
+                <i class="fa-solid fa-trophy text-gold"></i> Evaluar Logros Verificables
+              </button>
+              <button class="btn btn-sm btn-outline shell-quick-btn" data-cmd="diet generate">
+                <i class="fa-solid fa-utensils"></i> Generar Dieta por Gramos
+              </button>
+              <button class="btn btn-sm btn-outline shell-quick-btn" data-cmd="routine generate">
+                <i class="fa-solid fa-dumbbell"></i> Generar Rutina & Biomecánica
+              </button>
+              <button class="btn btn-sm btn-outline shell-quick-btn" data-cmd="report">
+                <i class="fa-solid fa-file-invoice"></i> Exportar Ficha Coach
+              </button>
+            </div>
+
+            <hr class="divider">
+
+            <h4><i class="fa-solid fa-award text-gold"></i> Insignias Verificadas</h4>
+            <div id="unlockedBadgesContainer" class="mt-xs display-flex flex-column gap-xs">
+              <div class="badge-card">
+                <i class="fa-solid fa-trophy text-gold"></i>
+                <div>
+                  <b>Adherencia Nutricional Élite</b>
+                  <p class="fs-xs text-muted">&gt;90% de adherencia calórica en 4 semanas.</p>
+                </div>
+              </div>
+              <div class="badge-card">
+                <i class="fa-solid fa-bolt text-cobalt"></i>
+                <div>
+                  <b>Sobrecarga Progresiva Verificada</b>
+                  <p class="fs-xs text-muted">+7.5 kg en press plano con técnica limpia.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Time-Based Progress History Table -->
+      <div class="card mt-lg">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-chart-area text-cobalt"></i> Matriz de Seguimiento Semanal por Tiempo (Check-ins Verificables)</h3>
+          <button class="btn btn-xs btn-primary" id="addCheckinBtn">
+            <i class="fa-solid fa-plus"></i> + Nuevo Check-in Semanal
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table" id="checkinsTable">
+              <thead>
+                <tr>
+                  <th>Semana</th>
+                  <th>Fecha</th>
+                  <th>Peso (kg)</th>
+                  <th>Cintura (cm)</th>
+                  <th>Adherencia %</th>
+                  <th>Carga Press (kg)</th>
+                  <th>Carga Prensa (kg)</th>
+                  <th>Estatus de Logro</th>
+                </tr>
+              </thead>
+              <tbody id="checkinsTableBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: MOTOR DE NUTRICIÓN (TDEE & MACROS EN GRAMOS) -->
+    <section id="section-nutrition" class="app-section">
+      <div class="section-header">
+        <div>
+          <span class="section-subtitle">PRESCRIPCIÓN CIENTÍFICA & ALIMENTACIÓN</span>
+          <h2 class="section-title">Motor de Nutrición & Calculadora TDEE</h2>
+        </div>
+        <div class="section-header-actions">
+          <button class="btn btn-secondary" onclick="window.print()">
+            <i class="fa-solid fa-print"></i> Imprimir Guía Nutricional
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-3 gap-lg">
+        <!-- TDEE Calculator Form -->
+        <div class="card col-span-1">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-calculator text-cobalt"></i> Calculadora Metabólica</h3>
+          </div>
+          <div class="card-body">
+            <form id="tdeeForm">
+              <div class="form-group">
+                <label for="nutriAge">Edad (Años)</label>
+                <input type="number" id="nutriAge" class="form-control" min="18" max="90" value="29" required>
+              </div>
+
+              <div class="form-group">
+                <label for="nutriGender">Sexo Biológico</label>
+                <select id="nutriGender" class="form-control">
+                  <option value="male" selected>Masculino</option>
+                  <option value="female">Femenino</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="nutriWeight">Peso (kg)</label>
+                  <input type="number" id="nutriWeight" class="form-control" step="0.1" min="40" max="220" value="76.4" required>
+                </div>
+                <div class="form-group">
+                  <label for="nutriHeight">Estatura (cm)</label>
+                  <input type="number" id="nutriHeight" class="form-control" min="130" max="230" value="178" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="nutriActivity">Nivel de Actividad</label>
+                <select id="nutriActivity" class="form-control">
+                  <option value="1.2">Sedentario (Oficina / Sin ejercicio)</option>
+                  <option value="1.375">Ligero (1-3 días por semana)</option>
+                  <option value="1.55" selected>Moderado (3-5 días de fuerza)</option>
+                  <option value="1.725">Intenso (6-7 días de entrenamiento)</option>
+                  <option value="1.9">Atleta de Élite (Doble sesión diaria)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="nutriGoal">Objetivo Metabólico</label>
+                <select id="nutriGoal" class="form-control">
+                  <option value="fatloss" selected>Pérdida de Grasa (Déficit -20%)</option>
+                  <option value="maintain">Mantenimiento Energético (Eucalórico)</option>
+                  <option value="muscle">Hipertrofia Muscular (Superávit +15%)</option>
+                  <option value="strength">Recomposición / Fuerza Máxima</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="nutriDietType">Preferencia Nutricional</label>
+                <select id="nutriDietType" class="form-control">
+                  <option value="omnivore" selected>Omnívora Premium</option>
+                  <option value="pescatarian">Pescetariana Élite</option>
+                  <option value="vegetarian">Vegetariana / Plant-Based</option>
+                  <option value="lowcarb">Low Carb / Cetogénica Controlada</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block mt-md">
+                <i class="fa-solid fa-bolt"></i> Calcular TDEE & Generar Dieta
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Calculated Diet Plan & Exact Grammages -->
+        <div class="card col-span-2">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-list-check text-cobalt"></i> Plan Alimentario Estructurado por Semana</h3>
+            <span class="badge badge-cobalt" id="dietBadge">Recomendación Personalizada</span>
+          </div>
+          <div class="card-body">
+            <!-- Caloric Target Summary Bar -->
+            <div class="grid grid-4 gap-sm p-sm bg-light border-radius mb-md" id="macroSummaryBox">
+              <div class="text-center">
+                <span class="text-muted fs-xs uppercase fw-700">TDEE Calculado</span>
+                <div class="fs-xl fw-800 text-cobalt" id="resTDEE">2,650 <small>kcal</small></div>
+              </div>
+              <div class="text-center">
+                <span class="text-muted fs-xs uppercase fw-700">Meta Diaria</span>
+                <div class="fs-xl fw-800 text-dark" id="resCalories">2,120 <small>kcal</small></div>
+              </div>
+              <div class="text-center">
+                <span class="text-muted fs-xs uppercase fw-700">Proteína</span>
+                <div class="fs-xl fw-800 text-cobalt" id="resProtein">172g <small>(32%)</small></div>
+              </div>
+              <div class="text-center">
+                <span class="text-muted fs-xs uppercase fw-700">Carbs / Grasas</span>
+                <div class="fs-xl fw-800 text-dark" id="resCarbsFat">205g C / 60g G</div>
+              </div>
+            </div>
+
+            <!-- Meal Breakdown Table with Grammages -->
+            <div class="meal-list" id="mealListContainer">
+              <!-- Rendered dynamically by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: GENERADOR DE ENTRENAMIENTO & BIOMECÁNICA -->
+    <section id="section-workout" class="app-section">
+      <div class="section-header">
+        <div>
+          <span class="section-subtitle">BIOMECÁNICA APLICADA & SEGUIMIENTO DE CARGAS</span>
+          <h2 class="section-title">Generador de Rutina Élite por Grupo Muscular</h2>
+        </div>
+        <div class="section-header-actions">
+          <button class="btn btn-outline" id="saveLoadsBtn">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar Historial de Cargas
+          </button>
+          <button class="btn btn-secondary" onclick="window.print()">
+            <i class="fa-solid fa-print"></i> Imprimir Rutina
+          </button>
+        </div>
+      </div>
+
+      <!-- Workout Configurator -->
+      <div class="card mb-lg">
+        <div class="card-body">
+          <div class="grid grid-4 gap-md align-end">
+            <div class="form-group mb-0">
+              <label for="workSplit">Distribución de Entrenamiento</label>
+              <select id="workSplit" class="form-control">
+                <option value="4days" selected>4 Días: Torso / Pierna (Recomendado)</option>
+                <option value="3days">3 Días: Rutina Completa (Full Body)</option>
+                <option value="5days">5 Días: Empuje / Tirón / Pierna (PPL + Upper/Lower)</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-0">
+              <label for="workLevel">Nivel de Experiencia Biomecánica</label>
+              <select id="workLevel" class="form-control">
+                <option value="intermediate" selected>Intermedio (Tensión Mecánica Optimizada)</option>
+                <option value="beginner">Principiante (Control Postural Base)</option>
+                <option value="advanced">Avanzado (Sobrecarga Progresiva & RIR 1-2)</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-0">
+              <label for="workFocus">Enfoque Principal</label>
+              <select id="workFocus" class="form-control">
+                <option value="hypertrophy" selected>Hipertrofia Estética & Simetría</option>
+                <option value="strength">Fuerza Bruta & Densidad Neural</option>
+                <option value="rehab">Salud Articular & Biomecánica Preventiva</option>
+              </select>
+            </div>
+
+            <div>
+              <button class="btn btn-primary btn-block" id="generateWorkoutBtn">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Generar Rutina Estructurada
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Workout Routine Display Container -->
+      <div id="workoutContainer" class="workout-days-grid">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+    </section>
+
+    <!-- SECTION 4: CRM & CAPTACIÓN DE LEADS -->
+    <section id="section-leads" class="app-section">
+      <div class="section-header">
+        <div>
+          <span class="section-subtitle">GESTIÓN DE PROSPECTOS DE ALTO VALOR</span>
+          <h2 class="section-title">CRM de Leads & Captación Marketing</h2>
+        </div>
+        <div class="section-header-actions">
+          <button class="btn btn-primary" id="openLeadModalBtn2">
+            <i class="fa-solid fa-user-plus"></i> Capturar Nuevo Prospecto
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-address-book text-cobalt"></i> Base de Datos de Prospectos VIP</h3>
+          <span class="badge badge-gold" id="leadCountBadge">3 Prospectos Registrados</span>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table" id="leadsTable">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Cliente Prospecto</th>
+                  <th>Contacto</th>
+                  <th>Objetivo Declarado</th>
+                  <th>Membresía Interés</th>
+                  <th>Estatus Lead</th>
+                  <th>Acciones CRM</th>
+                </tr>
+              </thead>
+              <tbody id="leadsTableBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: PAYPAL CHECKOUT & SUBSCRIPCIONES ÉLITE -->
+    <section id="section-checkout" class="app-section">
+      <div class="section-header text-center max-w-2xl mx-auto">
+        <span class="section-subtitle">ACCESO ÉLITE & MEMBRESÍAS</span>
+        <h2 class="section-title">Pasarela de Pagos PayPal Checkout</h2>
+        <p class="text-muted">Cobro inmediato de planes semanales o mensuales con confirmación en tiempo real directamente en la plataforma.</p>
+      </div>
+
+      <div class="grid grid-3 gap-lg max-w-5xl mx-auto mt-lg">
+        <!-- Plan 1: Semanal -->
+        <div class="card plan-card">
+          <div class="plan-header">
+            <span class="plan-tag">ACCESO RÁPIDO</span>
+            <h3 class="plan-title">Plan Semanal VIP</h3>
+            <div class="plan-price">$29 <span>USD / sem</span></div>
+          </div>
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-check text-cobalt"></i> TDEE & Dieta semanal ajustada</li>
+            <li><i class="fa-solid fa-check text-cobalt"></i> Generador de Rutina por Grupo Muscular</li>
+            <li><i class="fa-solid fa-check text-cobalt"></i> Tips de Postura y Biomecánica</li>
+            <li><i class="fa-solid fa-xmark text-muted"></i> Sin soporte prioritario vía WhatsApp</li>
+          </ul>
+          <button class="btn btn-outline btn-block select-plan-btn" data-plan="Plan Semanal VIP" data-price="29">
+            Seleccionar Plan
+          </button>
+        </div>
+
+        <!-- Plan 2: Mensual Élite (Featured) -->
+        <div class="card plan-card featured">
+          <div class="plan-badge-top">MÁS POPULAR</div>
+          <div class="plan-header">
+            <span class="plan-tag text-gold">TRANSFORMACIÓN TOTAL</span>
+            <h3 class="plan-title">Plan Mensual Élite</h3>
+            <div class="plan-price">$89 <span>USD / mes</span></div>
+          </div>
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-check text-cobalt"></i> Todo lo incluido en el Plan Semanal</li>
+            <li><i class="fa-solid fa-check text-cobalt"></i> Audits Semanales de Biomecánica</li>
+            <li><i class="fa-solid fa-check text-cobalt"></i> Panel CRM de Confrontación de Logros</li>
+            <li><i class="fa-solid fa-check text-cobalt"></i> Recordatorios Automáticos de Retención</li>
+          </ul>
+          <button class="btn btn-primary btn-block select-plan-btn" data-plan="Plan Mensual Élite" data-price="89">
+            Seleccionar Plan
+          </button>
+        </div>
+
+        <!-- Plan 3: Colectivo Gym Master -->
+        <div class="card plan-card">
+          <div class="plan-header">
+            <span class="plan-tag">GIMNASIOS & COACHES</span>
+            <h3 class="plan-title">Licencia GymOS Pro</h3>
+            <div class="plan-price">$199 <span>USD / mes</span></div>
+          </div>
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-check text-cobalt"></i> Clientes ilimitados en CRM</li>
+            <li><i class="fa-solid fa-check text-cobalt"></i> Marca personalizada para gimnasio</li>
+            <li><i class="fa-solid fa-check text-cobalt"></i> Generador de Tickets e Impresión</li>
+            <li><i class="fa-solid fa-check text-cobalt"></i> Integración PayPal comercial propia</li>
+          </ul>
+          <button class="btn btn-outline btn-block select-plan-btn" data-plan="Licencia GymOS Pro" data-price="199">
+            Seleccionar Plan
+          </button>
+        </div>
+      </div>
+
+      <!-- PAYPAL CHECKOUT CONTAINER -->
+      <div class="card max-w-xl mx-auto mt-xl p-lg" id="paypalContainerBox">
+        <div class="text-center mb-md">
+          <span class="badge badge-cobalt mb-xs">PASARELA OFICIAL DE PAGO</span>
+          <h3 id="selectedPlanTitle">Plan Seleccionado: Plan Mensual Élite ($89 USD)</h3>
+          <p class="text-muted fs-sm">Pague de forma segura mediante su cuenta PayPal o tarjeta de crédito/débito.</p>
+        </div>
+
+        <!-- Real PayPal Checkout SDK Container -->
+        <div id="paypal-button-container"></div>
+
+        <!-- Backup Instant Demo Checkout Button (for offline/test mode without API keys) -->
+        <div class="mt-md text-center">
+          <button class="btn btn-secondary btn-sm" id="simulatedPayBtn">
+            <i class="fa-solid fa-shield-halved"></i> Simular Confirmación Inmediata de Pago
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL DE CAPTACIÓN DE LEADS CRM -->
+  <div class="modal-backdrop" id="leadModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <span class="badge badge-gold">MEMBER ONBOARDING</span>
+          <h3 class="modal-title">Captación de Cliente Élite</h3>
+        </div>
+        <button class="modal-close" id="closeLeadModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="leadCaptureForm">
+          <div class="form-group">
+            <label for="leadName">Nombre Completo</label>
+            <input type="text" id="leadName" class="form-control" placeholder="Ej. Carlos Mendoza" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="leadEmail">Correo Electrónico</label>
+              <input type="email" id="leadEmail" class="form-control" placeholder="carlos@ejemplo.com" required>
+            </div>
+            <div class="form-group">
+              <label for="leadPhone">Teléfono / WhatsApp</label>
+              <input type="tel" id="leadPhone" class="form-control" placeholder="+52 55 1234 5678" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="leadGoal">Meta Principal de Rendimiento</label>
+            <select id="leadGoal" class="form-control">
+              <option value="Pérdida de Grasa & Definición">Pérdida de Grasa & Definición Muscular</option>
+              <option value="Hipertrofia & Masa Muscular Élite">Hipertrofia & Masa Muscular Élite</option>
+              <option value="Recomposición Física & Biomecánica">Recomposición Física & Biomecánica</option>
+              <option value="Preparación Deportiva de Alto Rendimiento">Preparación Deportiva de Alto Rendimiento</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="leadPlanInterest">Plan de Interés</label>
+            <select id="leadPlanInterest" class="form-control">
+              <option value="Plan Mensual Élite ($89 USD)">Plan Mensual Élite ($89 USD)</option>
+              <option value="Plan Semanal VIP ($29 USD)">Plan Semanal VIP ($29 USD)</option>
+              <option value="Licencia GymOS Pro ($199 USD)">Licencia GymOS Pro ($199 USD)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="leadNotes">Observaciones o Condiciones Biomecánicas</label>
+            <textarea id="leadNotes" class="form-control" rows="3" placeholder="Alergias, molestias en rodillas/hombros, horario de preferencia..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block mt-md">
+            <i class="fa-solid fa-paper-plane"></i> Registrar & Enviar a CRM
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('GymOS PWA ServiceWorker registrado:', reg.scope))
+          .catch(err => console.warn('GymOS PWA ServiceWorker error:', err));
+      });
+    }
+  </script>
+
+  <!-- APPLICATION JAVASCRIPT -->
+  <script src="js/app.js"></script>
+</body>
+</html>

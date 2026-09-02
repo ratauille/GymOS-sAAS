@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Local Environment & Secrets
+.env
+.env.local
+.env.*.local
+gymos_coach_db.json
+
+# IDE / System
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Scratch & Logs
+*.log
+scratch/
