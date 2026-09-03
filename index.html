@@ -66,6 +66,9 @@
         <button class="nav-btn" data-target="section-affiliates">
           <i class="fa-solid fa-handshake-simple"></i> Programa de Afiliados
         </button>
+        <button class="nav-btn" data-target="section-biolink">
+          <i class="fa-solid fa-[#fa-link] fa-link"></i> BioLink Élite
+        </button>
       </nav>
 
       <div class="nav-actions">
@@ -857,6 +860,126 @@
             </div>
             <div class="faq-answer">
               Las comisiones se liquidan de forma trimestral o mensual directamente a tu cuenta bancaria nacional o cuenta PayPal registrada en tu panel de afiliado.
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- SECTION 7: BIOLINK ÉLITE (LINKTREE PARA ENTRENADORES Y GIMNASIOS) -->
+    <section id="section-biolink" class="app-section">
+      <div class="section-header text-center max-w-2xl mx-auto">
+        <span class="section-subtitle"><i class="fa-solid fa-link text-gold"></i> LINK IN BIO EXCLUSIVO</span>
+        <h2 class="section-title">Generador de BioLink Élite (Estilo Harbiz & Linktree)</h2>
+        <p class="text-muted">Crea tu propia página de enlaces profesionales para tu bio de Instagram, TikTok y WhatsApp. Captura leads y vende asesorías 24/7.</p>
+      </div>
+
+      <div class="grid grid-2 gap-lg mt-lg">
+        <!-- BioLink Configurator -->
+        <div class="card p-lg">
+          <div class="card-header border-bottom pb-sm mb-md">
+            <h3 class="fs-lg font-serif"><i class="fa-solid fa-sliders text-cobalt"></i> Personalizador de tu BioLink</h3>
+          </div>
+
+          <form id="biolinkConfigForm" onsubmit="event.preventDefault();">
+            <div class="form-group mb-sm">
+              <label for="bioCoachName">Nombre de tu Marca / Entrenador</label>
+              <input type="text" id="bioCoachName" class="form-control" value="Coach Carlos Ruiz | GymOS Élite">
+            </div>
+
+            <div class="form-group mb-sm">
+              <label for="bioCoachTagline">Descripción Breve de Bio (Tagline)</label>
+              <input type="text" id="bioCoachTagline" class="form-control" value="Transformación Biomecánica & Nutrición Personalizada de Alto Rendimiento.">
+            </div>
+
+            <div class="form-group mb-sm">
+              <label for="bioAvatarSelect">Icono / Avatar de Perfil</label>
+              <select id="bioAvatarSelect" class="form-control">
+                <option value="crown">👑 Corona Élite Gold</option>
+                <option value="dumbbell" selected>🏋️‍♂️ Mancuerna Biomecánica</option>
+                <option value="user-ninja">🥷 Coach Máster</option>
+                <option value="bolt">⚡ Rayo Metabólico</option>
+              </select>
+            </div>
+
+            <div class="card-header mt-md mb-xs p-0 border-none">
+              <h4 class="fs-sm font-bold text-cobalt uppercase">Botones de Acción Personalizados</h4>
+            </div>
+
+            <div class="form-group mb-xs">
+              <label class="fs-xs">Enlace 1: Título & Acción</label>
+              <input type="text" id="bioLink1Text" class="form-control mb-xs" value="🗓️ Agendar Diagnóstico Biomecánico Gratis (10 Min)">
+            </div>
+
+            <div class="form-group mb-xs">
+              <label class="fs-xs">Enlace 2: Título & Acción</label>
+              <input type="text" id="bioLink2Text" class="form-control mb-xs" value="⚡ Calcular mi TDEE & Plan Nutricional Instantáneo">
+            </div>
+
+            <div class="form-group mb-xs">
+              <label class="fs-xs">Enlace 3: Título & Acción</label>
+              <input type="text" id="bioLink3Text" class="form-control mb-xs" value="💳 Adquirir Plan Asesoría Mensual ($999 MXN)">
+            </div>
+
+            <div class="form-group mb-md">
+              <label class="fs-xs">Enlace 4: Título & Acción</label>
+              <input type="text" id="bioLink4Text" class="form-control mb-xs" value="📚 Descargar Guía de Nutrición Élite (GRATIS)">
+            </div>
+
+            <div class="affiliate-link-box mb-md">
+              <input type="text" id="generatedBioUrl" class="form-control" readonly value="https://ratauille.github.io/GymOS-sAAS/?biolink=CoachCarlos">
+              <button type="button" class="btn btn-primary btn-sm" id="copyBioUrlBtn">
+                <i class="fa-solid fa-copy"></i> Copiar URL
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Phone Simulator BioLink Live Preview -->
+        <div class="display-flex justify-center items-center">
+          <div class="phone-mockup-frame p-md bg-dark text-center border-radius-lg shadow-lg max-w-sm w-full" style="background-color: #0F2C59; color: #FFFFFF; border: 8px solid #1E3E62; border-radius: 36px; padding: 2rem 1.25rem;">
+            <!-- Top Camera Notch -->
+            <div class="notch mx-auto mb-md bg-black" style="width: 100px; height: 16px; border-radius: 10px; opacity: 0.6;"></div>
+
+            <!-- Avatar -->
+            <div class="bio-avatar-circle mx-auto mb-sm display-flex items-center justify-center bg-white text-cobalt" style="width: 80px; height: 80px; border-radius: 50%; font-size: 2.2rem; margin: 0 auto; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+              <i class="fa-solid fa-dumbbell" id="previewBioAvatarIcon"></i>
+            </div>
+
+            <!-- Title & Tagline -->
+            <h3 class="font-serif fs-lg fw-700 text-white mb-xs" id="previewBioName">Coach Carlos Ruiz</h3>
+            <span class="badge badge-gold mb-sm" style="font-size: 0.7rem;">VERIFICADO GYMOS</span>
+            <p class="fs-xs text-muted-light mb-md" id="previewBioTagline" style="color: #CBD5E1; font-size: 0.82rem; line-height: 1.4;">Transformación Biomecánica & Nutrición Personalizada de Alto Rendimiento.</p>
+
+            <!-- Action Buttons Stack -->
+            <div class="bio-buttons-stack display-flex flex-column gap-xs mb-lg" id="previewBioButtonsStack">
+              <a href="#section-leads" class="btn btn-block bg-white text-dark font-bold p-sm border-radius fs-xs shadow-sm hover-scale" style="background: #FFFFFF; color: #0F2C59; text-decoration: none; border-radius: 12px; font-size: 0.82rem;">
+                <span id="prevBtn1">🗓️ Agendar Diagnóstico Biomecánico Gratis (10 Min)</span>
+              </a>
+
+              <a href="#section-tdee" class="btn btn-block bg-white text-dark font-bold p-sm border-radius fs-xs shadow-sm hover-scale" style="background: #FFFFFF; color: #0F2C59; text-decoration: none; border-radius: 12px; font-size: 0.82rem;">
+                <span id="prevBtn2">⚡ Calcular mi TDEE & Plan Nutricional Instantáneo</span>
+              </a>
+
+              <a href="#section-checkout" class="btn btn-block bg-white text-dark font-bold p-sm border-radius fs-xs shadow-sm hover-scale" style="background: #FFFFFF; color: #0F2C59; text-decoration: none; border-radius: 12px; font-size: 0.82rem;">
+                <span id="prevBtn3">💳 Adquirir Plan Asesoría Mensual ($999 MXN)</span>
+              </a>
+
+              <a href="#section-affiliates" class="btn btn-block bg-white text-dark font-bold p-sm border-radius fs-xs shadow-sm hover-scale" style="background: #FFFFFF; color: #0F2C59; text-decoration: none; border-radius: 12px; font-size: 0.82rem;">
+                <span id="prevBtn4">📚 Descargar Guía de Nutrición Élite (GRATIS)</span>
+              </a>
+            </div>
+
+            <!-- Social Links Icons -->
+            <div class="display-flex justify-center gap-md text-white fs-lg" style="color: #FFFFFF;">
+              <a href="#" style="color: #FFFFFF;"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#" style="color: #FFFFFF;"><i class="fa-brands fa-tiktok"></i></a>
+              <a href="#" style="color: #FFFFFF;"><i class="fa-brands fa-whatsapp"></i></a>
+              <a href="#" style="color: #FFFFFF;"><i class="fa-brands fa-youtube"></i></a>
+              <a href="#" style="color: #FFFFFF;"><i class="fa-brands fa-spotify"></i></a>
+            </div>
+
+            <!-- Footer Branding -->
+            <div class="mt-md fs-xs text-muted" style="font-size: 0.65rem; color: #94A3B8;">
+              Powered by <strong>GymOS Luxury Edition</strong>
             </div>
           </div>
         </div>

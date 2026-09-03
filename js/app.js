@@ -909,6 +909,65 @@
     });
   }
 
+  // --- 10. BIOLINK ÉLITE GENERATOR ENGINE ---
+  function initBioLinkGenerator() {
+    const coachNameInput = $('#bioCoachName');
+    const coachTaglineInput = $('#bioCoachTagline');
+    const avatarSelect = $('#bioAvatarSelect');
+    const link1Input = $('#bioLink1Text');
+    const link2Input = $('#bioLink2Text');
+    const link3Input = $('#bioLink3Text');
+    const link4Input = $('#bioLink4Text');
+    const bioUrlInput = $('#generatedBioUrl');
+    const copyBioBtn = $('#copyBioUrlBtn');
+
+    const prevName = $('#previewBioName');
+    const prevTagline = $('#previewBioTagline');
+    const prevAvatarIcon = $('#previewBioAvatarIcon');
+    const prevB1 = $('#prevBtn1');
+    const prevB2 = $('#prevBtn2');
+    const prevB3 = $('#prevBtn3');
+    const prevB4 = $('#prevBtn4');
+
+    function updatePreview() {
+      if (prevName && coachNameInput) prevName.textContent = coachNameInput.value || 'Tu Nombre / Marca';
+      if (prevTagline && coachTaglineInput) prevTagline.textContent = coachTaglineInput.value || 'Tu Tagline Bio';
+      if (prevB1 && link1Input) prevB1.textContent = link1Input.value || 'Enlace 1';
+      if (prevB2 && link2Input) prevB2.textContent = link2Input.value || 'Enlace 2';
+      if (prevB3 && link3Input) prevB3.textContent = link3Input.value || 'Enlace 3';
+      if (prevB4 && link4Input) prevB4.textContent = link4Input.value || 'Enlace 4';
+
+      if (coachNameInput && bioUrlInput) {
+        const slug = coachNameInput.value.trim().replace(/[^a-zA-Z0-9]/g, '') || 'Coach';
+        bioUrlInput.value = `https://ratauille.github.io/GymOS-sAAS/?biolink=${slug}`;
+      }
+
+      if (prevAvatarIcon && avatarSelect) {
+        const iconMap = {
+          'crown': 'fa-crown',
+          'dumbbell': 'fa-dumbbell',
+          'user-ninja': 'fa-user-ninja',
+          'bolt': 'fa-bolt'
+        };
+        prevAvatarIcon.className = `fa-solid ${iconMap[avatarSelect.value] || 'fa-dumbbell'}`;
+      }
+    }
+
+    [coachNameInput, coachTaglineInput, avatarSelect, link1Input, link2Input, link3Input, link4Input].forEach(el => {
+      el?.addEventListener('input', updatePreview);
+      el?.addEventListener('change', updatePreview);
+    });
+
+    copyBioBtn?.addEventListener('click', () => {
+      if (bioUrlInput) {
+        navigator.clipboard.writeText(bioUrlInput.value);
+        showToast('¡URL de BioLink copiada al portapapeles!', 'fa-link');
+      }
+    });
+
+    updatePreview();
+  }
+
   // --- INITIALIZATION ENTRY POINT ---
   document.addEventListener('DOMContentLoaded', () => {
     initHeroCarousel();
@@ -920,6 +979,7 @@
     initReminders();
     initPayPalCheckout();
     initAffiliateAndFAQUI();
+    initBioLinkGenerator();
 
     console.log('GymOS Luxury Edition & Coach Shell initialized successfully.');
   });
