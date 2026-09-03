@@ -25,6 +25,8 @@
 6. **Backend Cloud Multi-tenant (Supabase)**: Esquema PostgreSQL con aislamiento RLS por gimnasio (`gym_id`).
 7. **PWA Instalable**: Funciona como app nativa en iOS (Safari) y Android (Chrome) sin pagar comisiones de App Stores.
 8. **Cobros con PayPal Checkout**: SDK de PayPal para planes semanales, mensuales o licencias.
+9. **Programa de Afiliados (Estilo Harbiz)**: Motor de referencias con comisión recurrente del 30%, generador de enlaces cortos, calculadora de ingresos pasivos y FAQ acordeón.
+10. **Generador BioLink Élite (Estilo Linktree)**: Creador de landing de enlaces para la bio de Instagram/TikTok de cada entrenador con simulador de smartphone en vivo.
 
 ---
 
