@@ -27,6 +27,8 @@
 8. **Cobros con PayPal Checkout**: SDK de PayPal para planes semanales, mensuales o licencias.
 9. **Programa de Afiliados (Estilo Harbiz)**: Motor de referencias con comisión recurrente del 30%, generador de enlaces cortos, calculadora de ingresos pasivos y FAQ acordeón.
 10. **Generador BioLink Élite (Estilo Linktree)**: Creador de landing de enlaces para la bio de Instagram/TikTok de cada entrenador con simulador de smartphone en vivo.
+11. **Academia Fitness (Estilo Hermarfit Education)**: Módulo de capacitación y masterclasses en Biomecánica, Nutrición Avanzada y Negocio Fitness con reproductor de video HD y avance de certificado.
+12. **Alternador de Tema Visual (Luxury Cobalt vs. Hermarfit Crimson Dark)**: Selector en 1 clic para cambiar entre la estética de lujo azul cobalto y el modo oscuro crimson `#D90100` / `#000000`.
 
 ---
 

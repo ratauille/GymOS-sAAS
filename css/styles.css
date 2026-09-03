@@ -1406,3 +1406,52 @@ textarea.form-control {
   gap: 0.75rem;
 }
 
+/* --------------------------------------------------------------------------
+   17. Hermarfit Dark Crimson Theme Overrides (.theme-hermarfit)
+   -------------------------------------------------------------------------- */
+body.theme-hermarfit {
+  --bg-main: #0A0A0A;
+  --bg-surface: #141414;
+  --bg-card: #1C1C1C;
+  --bg-alt: #262626;
+  --text-title: #FFFFFF;
+  --text-main: #E2E8F0;
+  --text-muted: #94A3B8;
+  --border-light: #333333;
+  --border-subtle: #2A2A2A;
+  --cobalt-dark: #D90100; /* Crimson Red */
+  --cobalt-primary: #FF1E1E;
+  --cobalt-hover: #B5041D;
+  --cobalt-border: rgba(217, 1, 0, 0.4);
+  background-color: #0A0A0A;
+  color: #E2E8F0;
+}
+
+body.theme-hermarfit .navbar {
+  background-color: rgba(20, 20, 20, 0.95);
+  border-bottom-color: #333333;
+}
+
+body.theme-hermarfit .hero-cinematic {
+  background: linear-gradient(135deg, #141414 0%, #1A0000 50%, #2D0000 100%);
+  color: #FFFFFF;
+  border-bottom-color: #D90100;
+}
+
+body.theme-hermarfit .hero-tag {
+  color: #D90100;
+  background: rgba(217, 1, 0, 0.15);
+  border-color: rgba(217, 1, 0, 0.4);
+}
+
+body.theme-hermarfit .quote-text {
+  color: #FFFFFF;
+}
+
+body.theme-hermarfit .card {
+  background-color: #1C1C1C;
+  border-color: #333333;
+  color: #FFFFFF;
+}
+
+

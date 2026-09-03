@@ -978,6 +978,76 @@
     updatePreview();
   }
 
+  // --- 11. HERMARFIT THEME TOGGLE & ACADEMIA FITNESS ENGINE ---
+  function initThemeToggle() {
+    const themeBtn = $('#themeToggleBtn');
+    if (!themeBtn) return;
+
+    const savedTheme = localStorage.getItem('gymos_theme');
+    if (savedTheme === 'hermarfit') {
+      document.body.classList.add('theme-hermarfit');
+      themeBtn.innerHTML = '<i class="fa-solid fa-palette"></i> Estilo Cobalto Élite';
+    }
+
+    themeBtn.addEventListener('click', () => {
+      const isHermarfit = document.body.classList.toggle('theme-hermarfit');
+      if (isHermarfit) {
+        localStorage.setItem('gymos_theme', 'hermarfit');
+        themeBtn.innerHTML = '<i class="fa-solid fa-palette"></i> Estilo Cobalto Élite';
+        showToast('Tema Hermarfit Dark Crimson activado', 'fa-fire');
+      } else {
+        localStorage.setItem('gymos_theme', 'cobalt');
+        themeBtn.innerHTML = '<i class="fa-solid fa-palette"></i> Estilo Hermarfit';
+        showToast('Tema Cobalto Élite activado', 'fa-gem');
+      }
+    });
+  }
+
+  function initAcademyModule() {
+    const startBtns = $$('.start-course-btn');
+    const badge = $('#activeCourseBadge');
+    const title = $('#activeCourseTitle');
+    const topic = $('#videoTopicTitle');
+    const completeBtn = $('#completeModuleBtn');
+    const percentEl = $('#courseProgressPercent');
+    const fillEl = $('#courseProgressBarFill');
+    const playIcon = $('#playVideoIcon');
+
+    let currentProgress = 35;
+
+    startBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const courseName = btn.dataset.course;
+        if (badge) badge.textContent = `MASTERCLASS ACTIVA`;
+        if (title) title.textContent = `Masterclass: ${courseName} Avanzada`;
+        if (topic) topic.textContent = `Módulo 1: Introducción Teórico-Práctica de ${courseName}`;
+        
+        currentProgress = 10;
+        if (percentEl) percentEl.textContent = `${currentProgress}% Completado`;
+        if (fillEl) fillEl.style.width = `${currentProgress}%`;
+
+        $('#coursePlayerContainer')?.scrollIntoView({ behavior: 'smooth' });
+        showToast(`Masterclass de ${courseName} cargada en el reproductor HD`, 'fa-graduation-cap');
+      });
+    });
+
+    completeBtn?.addEventListener('click', () => {
+      currentProgress = Math.min(100, currentProgress + 25);
+      if (percentEl) percentEl.textContent = `${currentProgress}% Completado`;
+      if (fillEl) fillEl.style.width = `${currentProgress}%`;
+
+      if (currentProgress >= 100) {
+        showToast('¡Felicidades! Has completado el curso y obtenido tu Certificado Digital', 'fa-award');
+      } else {
+        showToast('¡Módulo completado con éxito! Siguiente lección desbloqueada.', 'fa-circle-check');
+      }
+    });
+
+    playIcon?.addEventListener('click', () => {
+      showToast('Reproduciendo Masterclass HD...', 'fa-play');
+    });
+  }
+
   // --- INITIALIZATION ENTRY POINT ---
   document.addEventListener('DOMContentLoaded', () => {
     initHeroCarousel();
@@ -990,6 +1060,8 @@
     initPayPalCheckout();
     initAffiliateAndFAQUI();
     initBioLinkGenerator();
+    initThemeToggle();
+    initAcademyModule();
 
     console.log('GymOS Luxury Edition & Coach Shell initialized successfully.');
   });
