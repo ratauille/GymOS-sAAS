@@ -37,10 +37,10 @@
   <header class="navbar">
     <div class="nav-container">
       <a href="#" class="brand">
-        <span class="brand-badge">GO</span>
+        <img src="img/irahi-reynosa-logo.png" alt="IFA Irahi Reynosa" class="brand-logo-img">
         <div class="brand-text">
-          <span class="brand-title">GymOS</span>
-          <span class="brand-sub">LUXURY PERFORMANCE</span>
+          <span class="brand-title">IRAHI REYNOSA</span>
+          <span class="brand-sub">IFA • GYMOS LUXURY EDITION</span>
         </div>
       </a>
 
@@ -87,9 +87,13 @@
 
     <!-- CINEMATIC MOTIVATIONAL HERO -->
     <section class="hero-cinematic">
+      <div class="hero-watermark"></div>
       <div class="hero-overlay"></div>
       <div class="hero-content">
-        <span class="hero-tag"><i class="fa-solid fa-sparkles"></i> INGENIERÍA DE RENDIMIENTO HUMANO</span>
+        <div class="hero-brand-header mb-sm">
+          <img src="img/irahi-reynosa-logo.png" alt="IFA Irahi Reynosa Logo" class="hero-logo-img">
+        </div>
+        <span class="hero-tag"><i class="fa-solid fa-sparkles"></i> INGENIERÍA DE RENDIMIENTO HUMANO • IRAHI REYNOSA</span>
         
         <!-- Motivational Phrases Carousel (Fade In / Fade Out) -->
         <div class="quote-carousel" id="quoteCarousel">
@@ -882,19 +886,20 @@
           <form id="biolinkConfigForm" onsubmit="event.preventDefault();">
             <div class="form-group mb-sm">
               <label for="bioCoachName">Nombre de tu Marca / Entrenador</label>
-              <input type="text" id="bioCoachName" class="form-control" value="Coach Carlos Ruiz | GymOS Élite">
+              <input type="text" id="bioCoachName" class="form-control" value="IFA Irahi Reynosa | Performance & Nutrition">
             </div>
 
             <div class="form-group mb-sm">
               <label for="bioCoachTagline">Descripción Breve de Bio (Tagline)</label>
-              <input type="text" id="bioCoachTagline" class="form-control" value="Transformación Biomecánica & Nutrición Personalizada de Alto Rendimiento.">
+              <input type="text" id="bioCoachTagline" class="form-control" value="Ingeniería de Rendimiento Humano, Biomecánica & Nutrición de Alta Precisión.">
             </div>
 
             <div class="form-group mb-sm">
               <label for="bioAvatarSelect">Icono / Avatar de Perfil</label>
               <select id="bioAvatarSelect" class="form-control">
+                <option value="logo" selected>🖼️ Logo Oficial IFA Irahi Reynosa</option>
                 <option value="crown">👑 Corona Élite Gold</option>
-                <option value="dumbbell" selected>🏋️‍♂️ Mancuerna Biomecánica</option>
+                <option value="dumbbell">🏋️‍♂️ Mancuerna Biomecánica</option>
                 <option value="user-ninja">🥷 Coach Máster</option>
                 <option value="bolt">⚡ Rayo Metabólico</option>
               </select>
@@ -925,7 +930,7 @@
             </div>
 
             <div class="affiliate-link-box mb-md">
-              <input type="text" id="generatedBioUrl" class="form-control" readonly value="https://ratauille.github.io/GymOS-sAAS/?biolink=CoachCarlos">
+              <input type="text" id="generatedBioUrl" class="form-control" readonly value="https://ratauille.github.io/GymOS-sAAS/?biolink=IrahiReynosa">
               <button type="button" class="btn btn-primary btn-sm" id="copyBioUrlBtn">
                 <i class="fa-solid fa-copy"></i> Copiar URL
               </button>
@@ -940,12 +945,13 @@
             <div class="notch mx-auto mb-md bg-black" style="width: 100px; height: 16px; border-radius: 10px; opacity: 0.6;"></div>
 
             <!-- Avatar -->
-            <div class="bio-avatar-circle mx-auto mb-sm display-flex items-center justify-center bg-white text-cobalt" style="width: 80px; height: 80px; border-radius: 50%; font-size: 2.2rem; margin: 0 auto; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-              <i class="fa-solid fa-dumbbell" id="previewBioAvatarIcon"></i>
+            <div class="bio-avatar-circle mx-auto mb-sm display-flex items-center justify-center bg-white text-cobalt" style="width: 85px; height: 85px; border-radius: 50%; padding: 6px; margin: 0 auto; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+              <img src="img/irahi-reynosa-logo.png" alt="IFA Irahi Reynosa" id="previewBioAvatarImg" style="width: 100%; height: 100%; object-fit: contain;">
+              <i class="fa-solid fa-dumbbell display-none" id="previewBioAvatarIcon"></i>
             </div>
 
             <!-- Title & Tagline -->
-            <h3 class="font-serif fs-lg fw-700 text-white mb-xs" id="previewBioName">Coach Carlos Ruiz</h3>
+            <h3 class="font-serif fs-lg fw-700 text-white mb-xs" id="previewBioName">IFA Irahi Reynosa</h3>
             <span class="badge badge-gold mb-sm" style="font-size: 0.7rem;">VERIFICADO GYMOS</span>
             <p class="fs-xs text-muted-light mb-md" id="previewBioTagline" style="color: #CBD5E1; font-size: 0.82rem; line-height: 1.4;">Transformación Biomecánica & Nutrición Personalizada de Alto Rendimiento.</p>
 

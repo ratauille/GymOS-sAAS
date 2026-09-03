@@ -197,6 +197,13 @@ p {
   background-color: var(--cobalt-primary);
 }
 
+.brand-logo-img {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(15, 44, 89, 0.12));
+}
+
 .brand-text {
   display: flex;
   flex-direction: column;
@@ -323,17 +330,32 @@ p {
 }
 
 /* --------------------------------------------------------------------------
-   5. Cinematic Motivational Hero (Carousel Fade-In / Fade-Out)
+   5. Cinematic Motivational Hero (Carousel Fade-In / Fade-Out & Irahi Reynosa Watermark)
    -------------------------------------------------------------------------- */
 .hero-cinematic {
   position: relative;
-  background: linear-gradient(135deg, #091527 0%, #0F2C59 60%, #1E3A8A 100%);
-  color: #FFFFFF;
-  padding: 4.5rem 2rem;
+  background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 50%, #F1F5F9 100%);
+  color: var(--cobalt-dark);
+  padding: 3.5rem 2rem 4rem;
   margin-bottom: 2.5rem;
-  border-bottom: 2px solid var(--gold-primary);
+  border-bottom: 3px solid var(--cobalt-dark);
   overflow: hidden;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.hero-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 650px;
+  height: 420px;
+  background-image: url('../img/irahi-reynosa-logo.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.07;
+  pointer-events: none;
 }
 
 .hero-overlay {
@@ -342,8 +364,8 @@ p {
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.12) 0%, transparent 50%),
-              radial-gradient(circle at 20% 80%, rgba(30, 58, 138, 0.4) 0%, transparent 60%);
+  background: radial-gradient(circle at 80% 20%, rgba(15, 44, 89, 0.04) 0%, transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -355,6 +377,18 @@ p {
   text-align: center;
 }
 
+.hero-logo-img {
+  max-height: 105px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 16px rgba(15, 44, 89, 0.15));
+  transition: transform 0.3s ease;
+}
+
+.hero-logo-img:hover {
+  transform: scale(1.04);
+}
+
 .hero-tag {
   display: inline-flex;
   align-items: center;
@@ -362,11 +396,11 @@ p {
   font-size: 0.75rem;
   letter-spacing: 0.2em;
   font-weight: 700;
-  color: var(--gold-primary);
-  background: rgba(255, 255, 255, 0.08);
-  padding: 0.35rem 1rem;
+  color: var(--cobalt-dark);
+  background: rgba(15, 44, 89, 0.06);
+  padding: 0.4rem 1.25rem;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  border: 1px solid rgba(15, 44, 89, 0.2);
   margin-bottom: 1.5rem;
   text-transform: uppercase;
 }
@@ -396,21 +430,19 @@ p {
 }
 
 .quote-text {
-  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  font-size: clamp(1.5rem, 3.5vw, 2.3rem);
   font-family: var(--font-serif);
-  color: #FFFFFF;
-  line-height: 1.25;
+  color: var(--cobalt-dark);
+  line-height: 1.3;
   margin-bottom: 1rem;
-  font-weight: 400;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  font-weight: 700;
 }
 
 .quote-author {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   letter-spacing: 0.25em;
-  color: var(--cobalt-border);
-  font-weight: 600;
-  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--gold-dark);
 }
 
 .hero-indicators {

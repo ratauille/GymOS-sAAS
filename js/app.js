@@ -942,14 +942,24 @@
         bioUrlInput.value = `https://ratauille.github.io/GymOS-sAAS/?biolink=${slug}`;
       }
 
-      if (prevAvatarIcon && avatarSelect) {
-        const iconMap = {
-          'crown': 'fa-crown',
-          'dumbbell': 'fa-dumbbell',
-          'user-ninja': 'fa-user-ninja',
-          'bolt': 'fa-bolt'
-        };
-        prevAvatarIcon.className = `fa-solid ${iconMap[avatarSelect.value] || 'fa-dumbbell'}`;
+      const prevAvatarImg = $('#previewBioAvatarImg');
+      if (avatarSelect) {
+        if (avatarSelect.value === 'logo') {
+          if (prevAvatarImg) prevAvatarImg.style.display = 'block';
+          if (prevAvatarIcon) prevAvatarIcon.style.display = 'none';
+        } else {
+          if (prevAvatarImg) prevAvatarImg.style.display = 'none';
+          if (prevAvatarIcon) {
+            prevAvatarIcon.style.display = 'block';
+            const iconMap = {
+              'crown': 'fa-crown',
+              'dumbbell': 'fa-dumbbell',
+              'user-ninja': 'fa-user-ninja',
+              'bolt': 'fa-bolt'
+            };
+            prevAvatarIcon.className = `fa-solid ${iconMap[avatarSelect.value] || 'fa-dumbbell'}`;
+          }
+        }
       }
     }
 
