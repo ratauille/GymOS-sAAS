@@ -1178,6 +1178,233 @@
     });
   }
 
+  // --- 14. CATÁLOGO GASTRONÓMICO DE RECETAS FITNESS (PDF & MENÚ DESPLEGABLE) ---
+  const RECIPES_DATABASE = {
+    'receta-1': {
+      title: 'Bowl de Avena Proteica con Frutos Rojos y Chía',
+      category: 'DESAYUNO ENERGÉTICO & ALTO EN FIBRA',
+      prepTime: '10 min',
+      servings: '1 persona',
+      difficulty: 'Fácil',
+      focus: 'Energía Sostenida',
+      calories: 385,
+      protein: 32,
+      carbs: 44,
+      fat: 8,
+      fiber: 9,
+      ingredients: [
+        { name: 'Copos de avena integral', grams: '50 g', note: 'Carbohidrato complejo rico en betaglucanos saciantes' },
+        { name: 'Proteína Whey Isolate (vainilla)', grams: '30 g (1 scoop)', note: 'Aislado de suero de leche de absorción óptima' },
+        { name: 'Bebida vegetal de almendras s/azúcar', grams: '180 ml', note: 'Base líquida ligera baja en densidad calórica' },
+        { name: 'Frutos rojos (fresas y arándanos)', grams: '70 g', note: 'Antioxidantes naturales, polifenoles y micronutrientes' },
+        { name: 'Semillas de chía', grams: '10 g', note: 'Ácidos grasos esenciales Omega-3 y mucílago digestivo' },
+        { name: 'Nueces en trozos', grams: '10 g', note: 'Grasas monoinsaturadas y aporte crocante' },
+        { name: 'Canela en polvo de Ceilán', grams: '2 g', note: 'Favorece el control glicémico y aroma natural' }
+      ],
+      steps: [
+        '1. Cocción base: En cacerola a fuego bajo, verter la bebida de almendras con la avena y la canela. Cocinar 4 min removiendo hasta lograr textura cremosa.',
+        '2. Mezcla proteica: Retirar del fuego y dejar reposar 1 min. Añadir el scoop de proteína en polvo batiendo con globo para integrar suavemente sin grumos.',
+        '3. Emplatado: Servir en bowl hondo. Disponer en abanico las fresas laminadas, arándanos, semillas de chía y trozos de nuez en la superficie.',
+        '4. Consumo: Disfrutar tibio al momento o conservar en frasco hermético en nevera como Overnight Oats para la mañana siguiente.'
+      ],
+      chefTip: 'Para maximizar la asimilación digestiva de la fibra, puedes activar la chía dejándola reposar 10 min en 30 ml de agua tibia antes de servir.'
+    },
+    'receta-2': {
+      title: 'Pechuga de Pollo al Limón con Quinoa y Espárragos',
+      category: 'ALMUERZO MAGRO & ALTA SÍNTESIS PROTEICA',
+      prepTime: '20 min',
+      servings: '1 persona',
+      difficulty: 'Fácil',
+      focus: 'Construcción Muscular',
+      calories: 450,
+      protein: 48,
+      carbs: 36,
+      fat: 11,
+      fiber: 6,
+      ingredients: [
+        { name: 'Pechuga de pollo limpia sin piel', grams: '180 g', note: 'Proteína de alto valor biológico baja en grasa' },
+        { name: 'Quinoa cocida (pre-lavada)', grams: '130 g (45g cruda)', note: 'Pseudocereal con perfil completo de 9 aminoácidos' },
+        { name: 'Espárragos verdes frescos', grams: '120 g', note: 'Diurético natural rico en fibra, folatos y asparagina' },
+        { name: 'Aceite de oliva virgen extra (AOVE)', grams: '7 ml (1/2 cda)', note: 'Ácido oleico cardioprotector y cocción limpia' },
+        { name: 'Jugo de limón eureka y ralladura', grams: '15 ml / 2 g', note: 'Ácido cítrico y aceites aromáticos digestivos' },
+        { name: 'Hierbas frescas (tomillo y romero)', grams: '3 g', note: 'Fitonutrientes y realce aromático mediterráneo' },
+        { name: 'Sal marina y pimienta negra', grams: '2 g', note: 'Sazón mineral sin excesos de sodio' }
+      ],
+      steps: [
+        '1. Marinado: Salpimentar la pechuga y frotar con el limón, su ralladura, tomillo y romero picados. Dejar reposar 5 min a temperatura ambiente.',
+        '2. Sellado: Calentar sartén con 3 ml de AOVE a fuego medio-alto. Cocinar el pollo 5-6 min por lado hasta dorar con 74°C internos.',
+        '3. Reposo cárnico: Reposar la pechuga 3 min cubierta en papel aluminio antes de rebanar en láminas oblicuas para conservar todos los jugos.',
+        '4. Salteado: En la misma sartén con los 4 ml restantes de AOVE, saltear los espárragos 4 min a fuego vivo hasta dejarlos tiernos al dente.',
+        '5. Montaje: Servir sobre cama de quinoa caliente, acomodar la pechuga en abanico y acompañar con los espárragos dorados.'
+      ],
+      chefTip: 'Lavar la quinoa con agua corriente fría 3 veces antes de hervirla elimina por completo la saponina amarga natural.'
+    },
+    'receta-3': {
+      title: 'Salmón a la Plancha con Puré Rústico de Camote y Brócoli',
+      category: 'COMIDA POST-ENTRENO & ÁCIDOS GRASOS ESENCIALES',
+      prepTime: '25 min',
+      servings: '1 persona',
+      difficulty: 'Media',
+      focus: 'Recuperación y Antiinflamación',
+      calories: 520,
+      protein: 42,
+      carbs: 40,
+      fat: 20,
+      fiber: 7,
+      ingredients: [
+        { name: 'Filete de salmón fresco con piel', grams: '170 g', note: 'Ácidos grasos EPA/DHA Omega-3 y proteína de asimilación pura' },
+        { name: 'Camote naranja (batata dulce)', grams: '160 g', note: 'Carbohidratos complejos de bajo índice glucémico y beta-caroteno' },
+        { name: 'Floretes de brócoli fresco', grams: '140 g', note: 'Sulforafano antioxidante, fibra crucífera y micronutrientes' },
+        { name: 'Aceite de oliva virgen extra', grams: '5 ml (1 cdta)', note: 'Grasa monoinsaturada para sellado a temperatura precisa' },
+        { name: 'Bebida de almendras s/azúcar', grams: '30 ml', note: 'Aporte de fluidez cremosa al puré sin grasas saturadas' },
+        { name: 'Nuez moscada, sal marina y pimienta', grams: '2 g', note: 'Matices aromáticos cálidos y sazón justa' },
+        { name: 'Gajos de limón amarillo', grams: '20 g', note: 'Contraste cítrico fresco para acompañar el salmón' }
+      ],
+      steps: [
+        '1. Puré de camote: Hervir el camote pelado en cubos 12 min. Escurrir y prensar con tenedor agregando bebida vegetal, nuez moscada y sal.',
+        '2. Brócoli al vapor: Cocinar floretes de brócoli al vapor 5 min. Pasar por agua fría para cortar cocción y fijar el color verde vibrante.',
+        '3. Salmón crujiente: Secar la piel del salmón. Salpimentar. En sartén caliente con aceite, cocinar con la piel hacia abajo 4 min; voltear 2 min más.',
+        '4. Emplatado: Trazar una base de puré de camote, coronar con el salmón crujiente y acompañar con el brócoli y un gajo de limón.'
+      ],
+      chefTip: 'Secar la piel del salmón con toalla de cocina antes de cocinarlo garantiza un acabado crujiente perfecto sin añadir harinas.'
+    },
+    'receta-4': {
+      title: 'Toast Integral de Masa Madre con Aguacate y Huevo Poché',
+      category: 'SNACK SALUDABLE / DESAYUNO FUNCIONAL',
+      prepTime: '12 min',
+      servings: '1 persona',
+      difficulty: 'Fácil',
+      focus: 'Grasas Saludables & Saciedad',
+      calories: 360,
+      protein: 18,
+      carbs: 28,
+      fat: 19,
+      fiber: 8,
+      ingredients: [
+        { name: 'Pan integral de masa madre', grams: '60 g (1 rebanada)', note: 'Carbohidratos complejos de fermentación lenta y alta digestibilidad' },
+        { name: 'Huevos de libre pastoreo', grams: '100 g (2 piezas)', note: 'Colina para función cognitiva, albúmina y leucina pura' },
+        { name: 'Aguacate Hass maduro', grams: '60 g (1/3 pieza)', note: 'Ácido oleico cardiosaludable y saciedad metabólica' },
+        { name: 'Semillas de calabaza tostadas', grams: '10 g', note: 'Zinc, magnesio y textura crujiente' },
+        { name: 'Hojuelas de chile peperoncino / pimentón', grams: '1 g', note: 'Capsaicina termogénica y realce visual' },
+        { name: 'Sal marina en escamas y gotas de limón', grams: '3 ml / 1 g', note: 'Acentúa los sabores naturales del aguacate fresco' }
+      ],
+      steps: [
+        '1. Tostado del pan: Tostar la rebanada de masa madre a fuego medio en plancha seca hasta que esté crujiente por fuera y tierna al centro.',
+        '2. Puré rústico: Machacar el aguacate con tenedor junto con unas gotas de limón fresco, pimienta y sal marina hasta lograr textura rústica.',
+        '3. Escalfado poché: En agua caliente a 85°C (sin hervir a borbotones), formar un remolino y deslizar los huevos. Cocinar 3 min exactos. Escurrir.',
+        '4. Armado: Extender el aguacate sobre la tostada, colocar con cuidado los dos huevos poché y terminar con semillas y escamas de sal.'
+      ],
+      chefTip: 'La yema líquida del huevo poché actúa como un aderezo natural ultra untuoso y nutritivo, sin recurrir a mayonesas comerciales.'
+    },
+    'receta-5': {
+      title: 'Tataki de Atún Sellado con Edamames y Espinacas Baby',
+      category: 'CENA LIGERA & DEFINICIÓN MUSCULAR PURA',
+      prepTime: '15 min',
+      servings: '1 persona',
+      difficulty: 'Media',
+      focus: 'Máxima Densidad Proteica',
+      calories: 395,
+      protein: 46,
+      carbs: 16,
+      fat: 14,
+      fiber: 6,
+      ingredients: [
+        { name: 'Lomo de atún fresco grado sashimi', grams: '170 g', note: 'Proteína pura magra de rápida digestión y fósforo' },
+        { name: 'Edamames desgranados cocidos', grams: '80 g', note: 'Proteína vegetal, isoflavonas y fibra soluble' },
+        { name: 'Espinacas baby frescas', grams: '70 g', note: 'Hierro no hemo, ácido fólico y volumen vegetal' },
+        { name: 'Semillas de sésamo mixto (blanco/negro)', grams: '8 g', note: 'Aporte de calcio biodisponible y costra crocante' },
+        { name: 'Aceite de sésamo tostado', grams: '5 ml (1 cdta)', note: 'Perfil aromático oriental concentrado' },
+        { name: 'Salsa de soja baja en sodio y vinagre de arroz', grams: '10 ml / 5 ml', note: 'Equilibrio umami sin sobrecarga salina' },
+        { name: 'Jengibre fresco rallado', grams: '3 g', note: 'Propiedades antiinflamatorias y acelerador digestivo' }
+      ],
+      steps: [
+        '1. Vinagreta umami: Emulsionar en un pocillo la salsa de soja baja en sodio, el vinagre de arroz, el jengibre rallado y el aceite de sésamo.',
+        '2. Costra de sésamo: Rebozar el lomo de atún presionando las semillas de sésamo contra las caras exteriores de la pieza.',
+        '3. Sellado tataki: En sartén de hierro muy caliente, sellar el atún 40 segundos por lado. Debe quedar tostado por fuera y crudo al centro. Rebanar en láminas de 1 cm.',
+        '4. Salteado flash: Saltear rápidamente los edamames y espinacas con 1 cdta de agua en la misma sartén durante 1 min para marchitar apenas las hojas.',
+        '5. Montaje: Armar una cama vegetal tibia, disponer las láminas de atún tataki y salsear con la emulsión umami.'
+      ],
+      chefTip: 'Corta el lomo de atún con un cuchillo bien afilado humedecido con agua fría para que las semillas de sésamo no se desprendan.'
+    }
+  };
+
+  function initRecipesCatalog() {
+    const dropdown = $('#recipeSelectDropdown');
+    const viewer = $('#recipeViewer');
+    const printBtn = $('#printRecipePdfBtn');
+
+    if (!dropdown || !viewer) return;
+
+    function renderRecipe(recipeKey) {
+      const r = RECIPES_DATABASE[recipeKey];
+      if (!r) return;
+
+      const ingredientsRows = r.ingredients.map(i => `
+        <tr>
+          <td><strong>${i.name}</strong></td>
+          <td><span class="val-num">${i.grams}</span></td>
+          <td class="fs-xs text-muted">${i.note}</td>
+        </tr>
+      `).join('');
+
+      const stepsHtml = r.steps.map(s => `<p class="mb-xs fs-xs" style="line-height: 1.6;">${s}</p>`).join('');
+
+      viewer.innerHTML = `
+        <div class="display-flex justify-between items-center border-bottom pb-sm mb-md flex-wrap gap-xs">
+          <div>
+            <span class="badge badge-gold mb-xs">${r.category}</span>
+            <h3 class="font-serif fs-lg text-cobalt" style="margin:0;">${r.title}</h3>
+            <span class="fs-xs text-muted">Porciones: ${r.servings} • Prep: ${r.prepTime} • Dificultad: ${r.difficulty} • Enfoque: ${r.focus}</span>
+          </div>
+          <div class="display-flex gap-xs text-center fs-xs">
+            <div class="p-xs bg-white border-radius shadow-sm"><span class="text-muted block uppercase fw-700">Calorías</span><strong class="text-cobalt fs-md">${r.calories} kcal</strong></div>
+            <div class="p-xs bg-white border-radius shadow-sm"><span class="text-muted block uppercase fw-700">Proteína</span><strong class="text-cobalt fs-md">${r.protein}g</strong></div>
+            <div class="p-xs bg-white border-radius shadow-sm"><span class="text-muted block uppercase fw-700">Carbs</span><strong class="text-dark fs-md">${r.carbs}g</strong></div>
+            <div class="p-xs bg-white border-radius shadow-sm"><span class="text-muted block uppercase fw-700">Grasas</span><strong class="text-dark fs-md">${r.fat}g</strong></div>
+            <div class="p-xs bg-white border-radius shadow-sm"><span class="text-muted block uppercase fw-700">Fibra</span><strong class="text-emerald fs-md">${r.fiber}g</strong></div>
+          </div>
+        </div>
+
+        <div class="grid grid-2 gap-md mb-md">
+          <div>
+            <h4 class="fs-sm font-serif text-cobalt mb-xs border-bottom pb-xs"><i class="fa-solid fa-scale-balanced"></i> Ingredientes y Gramajes Exactos</h4>
+            <table class="meal-table">
+              <thead>
+                <tr>
+                  <th>Ingrediente</th>
+                  <th>Gramaje / Cantidad</th>
+                  <th>Aporte Nutricional Clave</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${ingredientsRows}
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <h4 class="fs-sm font-serif text-cobalt mb-xs border-bottom pb-xs"><i class="fa-solid fa-list-ol"></i> Método de Preparación Paso a Paso</h4>
+            <div class="p-sm bg-white border-radius border mb-sm">
+              ${stepsHtml}
+            </div>
+            <div class="p-sm border-radius fs-xs" style="background: #FFFBEB; border: 1px solid #FCD34D; color: #78350F;">
+              <strong><i class="fa-solid fa-lightbulb text-gold"></i> Tip del Chef:</strong> ${r.chefTip}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    dropdown.addEventListener('change', () => {
+      renderRecipe(dropdown.value);
+    });
+
+    printBtn?.addEventListener('click', () => {
+      window.print();
+    });
+
+    renderRecipe('receta-1');
+  }
+
   // --- INITIALIZATION ENTRY POINT ---
   document.addEventListener('DOMContentLoaded', () => {
     initHeroCarousel();
@@ -1194,6 +1421,7 @@
     initAcademyModule();
     initDietPdfExport();
     initScrollModeToggle();
+    initRecipesCatalog();
 
     console.log('GymOS Luxury Edition & Coach Shell initialized successfully.');
   });
