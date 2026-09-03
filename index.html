@@ -1,8 +1,22 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-wp-dark-mode-active="true" data-wp-dark-mode-loading="true" data-wp-dark-mode-preset="0">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Indica que la página soporta esquema oscuro -->
+  <meta name="color-scheme" content="dark">
+  <!-- Añade la clase de modo oscuro lo antes posible para prevenir parpadeos -->
+  <script>
+    (function(){
+      try {
+        // Añade la clase que tu CSS puede detectar para aplicar estilos oscuros
+        document.documentElement.classList.add('hf-permanent-dark');
+        // Marcar estado para compatibilidad con snippets importados de WP
+        document.documentElement.setAttribute('data-wp-dark-mode-active', 'true');
+        document.documentElement.setAttribute('data-wp-dark-mode-loading', 'false');
+      } catch(e){ console.warn('Dark-mode init failed', e); }
+    })();
+  </script>
   <meta name="description" content="GymOS Luxury Edition - Plataforma web de rendimiento físico, nutrición de alta precisión y gestión de clientes élite.">
   <meta name="theme-color" content="#0F2C59">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,7 +25,8 @@
 
   <!-- PWA Manifest Link -->
   <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%230F2C59' rx='100'/%3E%3Cpath fill='%23FFFFFF' d='M160 160h192v48H160zm0 96h192v48H160zm0 96h120v48H160z'/%3E%3C/svg%3E">
+  <link rel="prefetch" href="manifest.json">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%230F2C59' rx='100'/%3E%3Cpath fill[...]
   
   <!-- Google Fonts: Belleza & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -287,7 +302,7 @@
             <div class="alert-box alert-info mt-md">
               <i class="fa-solid fa-circle-info"></i>
               <div>
-                <strong>Análisis Biométrico Automático:</strong> El cliente registra una recomposición corporal eficiente. Mantener déficit calórico e incrementar 2.5 kg en sentadilla/prensa la próxima semana.
+                <strong>Análisis Biométrico Automático:</strong> El cliente registra una recomposición corporal eficiente. Mantener déficit calórico e incrementar 2.5 kg en sentadilla/prensa la [...]
               </div>
             </div>
           </div>
@@ -546,7 +561,7 @@
                 <label for="nutriDietType">Preferencia Nutricional</label>
                 <select id="nutriDietType" class="form-control">
                   <option value="omnivore" selected>Omnívora Premium</option>
-                  <option value="pescatarian">Pescetariana Élite</option>
+                  <option value="pescatarian">Pescatariana Élite</option>
                   <option value="vegetarian">Vegetariana / Plant-Based</option>
                   <option value="lowcarb">Low Carb / Cetogénica Controlada</option>
                 </select>
@@ -582,7 +597,7 @@
               </div>
               <div class="text-center">
                 <span class="text-muted fs-xs uppercase fw-700">Carbs / Grasas</span>
-                <div class="fs-xl text-dark" id="resCarbsFat"><span class="val-num">205</span> <span class="unit-badge unit-grams">g C</span> / <span class="val-num">60</span> <span class="unit-badge unit-grams">g G</span></div>
+                <div class="fs-xl text-dark" id="resCarbsFat"><span class="val-num">205</span> <span class="unit-badge unit-grams">g C</span> / <span class="val-num">60</span> <span class="unit-badge">[...]</div>
               </div>
             </div>
 
