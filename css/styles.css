@@ -225,7 +225,78 @@ p {
 .nav-links {
   display: flex;
   align-items: center;
+  gap: 0.75rem;
+}
+
+/* --- Dropdown Navigation Bar (Clean & Spaced) --- */
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown-btn {
+  background: var(--bg-alt);
+  border: 1px solid var(--border-light);
+  color: var(--text-main);
+  padding: 0.6rem 1.15rem;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
   gap: 0.5rem;
+  transition: var(--transition);
+}
+
+.nav-dropdown-btn:hover,
+.nav-dropdown:hover .nav-dropdown-btn {
+  background-color: var(--cobalt-light);
+  color: var(--cobalt-dark);
+  border-color: var(--cobalt-border);
+}
+
+.dropdown-arrow {
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+.nav-dropdown:hover .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  min-width: 220px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 200;
+}
+
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown.active .nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-dropdown-menu .nav-btn {
+  width: 100%;
+  justify-content: flex-start;
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.85rem;
 }
 
 .nav-btn {
@@ -1453,5 +1524,79 @@ body.theme-hermarfit .card {
   border-color: #333333;
   color: #FFFFFF;
 }
+
+/* --------------------------------------------------------------------------
+   18. Airy Spacing & Clean PDF Printable Styling (@media print)
+   -------------------------------------------------------------------------- */
+.app-section {
+  padding: 1.5rem 0 3.5rem;
+}
+
+.card {
+  padding: 1.85rem 2rem;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.pdf-meal-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.85rem;
+}
+
+.pdf-meal-title {
+  font-weight: 700;
+  color: #0F2C59;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #F1F5F9;
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.pdf-food-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  padding: 0.25rem 0;
+  color: #334155;
+}
+
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+
+  #dietPdfModal,
+  #dietPdfModal #pdfPrintableArea,
+  #dietPdfModal #pdfPrintableArea * {
+    visibility: visible !important;
+  }
+
+  #dietPdfModal {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    background: #FFFFFF !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  #dietPdfModal .modal-card {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  #dietPdfModal .modal-header {
+    display: none !important;
+  }
+}
+
 
 

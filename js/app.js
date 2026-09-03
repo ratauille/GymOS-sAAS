@@ -137,7 +137,7 @@
     startAutoPlay();
   }
 
-  // --- 2. SINGLE PAGE TAB NAVIGATION ---
+  // --- 2. SINGLE PAGE TAB NAVIGATION & DROPDOWN MENUS ---
   function initNavigation() {
     const navButtons = $$('.nav-btn');
     const sections = $$('.app-section');
@@ -155,7 +155,27 @@
           targetSection.classList.add('active');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // Close parent dropdown menu if present
+        $$('.nav-dropdown').forEach(d => d.classList.remove('active'));
       });
+    });
+
+    // Dropdown toggle logic
+    $$('.nav-dropdown-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const parent = btn.closest('.nav-dropdown');
+        const wasActive = parent.classList.contains('active');
+        $$('.nav-dropdown').forEach(d => d.classList.remove('active'));
+        if (!wasActive) parent.classList.add('active');
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.nav-dropdown')) {
+        $$('.nav-dropdown').forEach(d => d.classList.remove('active'));
+      }
     });
 
     $('#openCheckoutNavBtn')?.addEventListener('click', () => {
@@ -1048,6 +1068,96 @@
     });
   }
 
+  // --- 12. FICHA NUTRICIONAL ÉLITE EXPORT & PDF GENERATOR ---
+  function initDietPdfExport() {
+    const previewBtn = $('#previewPdfDietBtn');
+    const downloadBtn = $('#downloadPdfDietBtn');
+    const printBtn = $('#printPdfDocumentBtn');
+    const modal = $('#dietPdfModal');
+
+    function populatePdfData() {
+      const activeClient = state.user.name || 'Carlos Mendoza';
+      const goalEl = $('#nutriGoal');
+      const goalText = goalEl ? goalEl.options[goalEl.selectedIndex].text : 'Pérdida de Grasa (Déficit -20%)';
+      const resCalories = $('#resCalories')?.textContent || '2,120 kcal';
+      const resProtein = $('#resProtein')?.textContent || '172g (32%)';
+      const resCarbsFat = $('#resCarbsFat')?.textContent || '205g C / 60g G';
+
+      $('#pdfClientName').textContent = activeClient;
+      $('#pdfGoalName').textContent = goalText;
+      $('#pdfCalorieTarget').textContent = resCalories;
+      $('#pdfProteinGrams').textContent = resProtein;
+      
+      const parts = resCarbsFat.split('/');
+      $('#pdfCarbsGrams').textContent = parts[0]?.trim() || '205g Carbs';
+      $('#pdfFatGrams').textContent = parts[1]?.trim() || '60g Grasas';
+
+      // Copy HTML from mealListContainer to pdfMealRowsContainer formatted cleanly
+      const mealList = $('#mealListContainer');
+      const pdfContainer = $('#pdfMealRowsContainer');
+      if (mealList && pdfContainer) {
+        const mealCards = mealList.querySelectorAll('.meal-card');
+        let pdfHtml = '';
+
+        mealCards.forEach((card, idx) => {
+          const title = card.querySelector('h4')?.textContent || `Comida ${idx + 1}`;
+          const kcalBadge = card.querySelector('.badge')?.textContent || '';
+          const rows = card.querySelectorAll('tbody tr');
+
+          let itemsHtml = '';
+          rows.forEach(r => {
+            const foodName = r.cells[0]?.textContent || '';
+            const grams = r.cells[1]?.textContent || '';
+            const kcal = r.cells[2]?.textContent || '';
+
+            itemsHtml += `
+              <div class="pdf-food-item">
+                <span>• <strong>${foodName}</strong></span>
+                <span style="font-weight: 700; color: #0F2C59;">${grams} (${kcal})</span>
+              </div>
+            `;
+          });
+
+          pdfHtml += `
+            <div class="pdf-meal-card">
+              <div class="display-flex justify-between items-center pdf-meal-title">
+                <span>${title}</span>
+                <span class="badge badge-gold" style="font-size: 0.7rem;">${kcalBadge}</span>
+              </div>
+              <div class="pdf-food-list">
+                ${itemsHtml}
+              </div>
+            </div>
+          `;
+        });
+
+        pdfContainer.innerHTML = pdfHtml || '<p class="text-muted">Por favor calcula un plan nutricional primero.</p>';
+      }
+
+      // Date & ID
+      const today = new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
+      $('#pdfDate').textContent = today;
+      $('#pdfId').textContent = `GYM-NUTRI-${Math.floor(1000 + Math.random() * 9000)}`;
+    }
+
+    previewBtn?.addEventListener('click', () => {
+      populatePdfData();
+      modal?.classList.add('active');
+    });
+
+    downloadBtn?.addEventListener('click', () => {
+      populatePdfData();
+      modal?.classList.add('active');
+      setTimeout(() => {
+        window.print();
+      }, 300);
+    });
+
+    printBtn?.addEventListener('click', () => {
+      window.print();
+    });
+  }
+
   // --- INITIALIZATION ENTRY POINT ---
   document.addEventListener('DOMContentLoaded', () => {
     initHeroCarousel();
@@ -1062,6 +1172,7 @@
     initBioLinkGenerator();
     initThemeToggle();
     initAcademyModule();
+    initDietPdfExport();
 
     console.log('GymOS Luxury Edition & Coach Shell initialized successfully.');
   });
