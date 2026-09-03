@@ -63,6 +63,9 @@
         <button class="nav-btn" data-target="section-checkout">
           <i class="fa-solid fa-credit-card"></i> Membresías Élite
         </button>
+        <button class="nav-btn" data-target="section-affiliates">
+          <i class="fa-solid fa-handshake-simple"></i> Programa de Afiliados
+        </button>
       </nav>
 
       <div class="nav-actions">
@@ -730,6 +733,132 @@
           <button class="btn btn-secondary btn-sm" id="simulatedPayBtn">
             <i class="fa-solid fa-shield-halved"></i> Simular Confirmación Inmediata de Pago
           </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: PROGRAMA DE AFILIADOS & FAQ INTERACTIVO (ESTILO HARBIZ) -->
+    <section id="section-affiliates" class="app-section">
+      <div class="section-header text-center max-w-2xl mx-auto">
+        <span class="section-subtitle"><i class="fa-solid fa-handshake-simple text-gold"></i> MONETIZACIÓN & COMISIONES RECURRENTES</span>
+        <h2 class="section-title">Programa de Afiliados GymOS & Captación en Clubes</h2>
+        <p class="text-muted">Gana hasta un 30% de comisión recurrente recomendando la plataforma todo en uno a entrenadores, consultores y centros de fitness.</p>
+      </div>
+
+      <!-- Affiliate Benefits Grid -->
+      <div class="grid grid-3 gap-lg mt-lg mb-xl">
+        <div class="card text-center p-lg">
+          <div class="metric-icon mx-auto mb-md"><i class="fa-solid fa-percent text-cobalt"></i></div>
+          <h3 class="fs-lg font-serif mb-xs">30% Comisión Recurrente</h3>
+          <p class="text-muted fs-sm">Recibe ingresos pasivos mensuales por cada cliente o gimnasio que active su plan con tu enlace único.</p>
+        </div>
+
+        <div class="card text-center p-lg">
+          <div class="metric-icon mx-auto mb-md"><i class="fa-solid fa-[#fa-qrcode] fa-qrcode text-gold"></i></div>
+          <h3 class="fs-lg font-serif mb-xs">Captación QR en Clubes</h3>
+          <p class="text-muted fs-sm">Materiales promocionales y plantillas con código QR para captar leads directamente en tu gimnasio o redes.</p>
+        </div>
+
+        <div class="card text-center p-lg">
+          <div class="metric-icon mx-auto mb-md"><i class="fa-solid fa-[#fa-sack-dollar] fa-sack-dollar text-emerald"></i></div>
+          <h3 class="fs-lg font-serif mb-xs">Pagos Seguros Trimestrales</h3>
+          <p class="text-muted fs-sm">Liquidación directa a tu cuenta bancaria o PayPal con panel de seguimiento en tiempo real.</p>
+        </div>
+      </div>
+
+      <!-- Affiliate Link Generator & Calculator -->
+      <div class="grid grid-2 gap-lg mb-xl">
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-link text-cobalt"></i> Generador de Enlace de Afiliado</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label for="affiliateNameInput">Nombre o Marca de Afiliado</label>
+              <input type="text" id="affiliateNameInput" class="form-control" placeholder="Ej. CoachCarlos" value="CoachCarlos">
+            </div>
+
+            <div class="affiliate-link-box mb-md">
+              <input type="text" id="generatedAffiliateLink" class="form-control" readonly value="https://ratauille.github.io/GymOS-sAAS/?aff=CoachCarlos">
+              <button class="btn btn-primary btn-sm" id="copyAffiliateLinkBtn">
+                <i class="fa-solid fa-copy"></i> Copiar
+              </button>
+            </div>
+            <p class="fs-xs text-muted">Comparte este enlace en tu Instagram, YouTube, WhatsApp o sitio web para registrar tus ventas.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-calculator text-gold"></i> Calculadora de Ingresos de Afiliado</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label for="affiliateReferredCount">Clientes / Gimnasios Recomendados</label>
+              <input type="range" id="affiliateReferredCount" min="1" max="50" value="10" class="form-control" style="cursor:pointer">
+              <div class="display-flex justify-between fs-xs text-muted mt-xs">
+                <span>1 cliente</span>
+                <b id="referredCountLabel" class="text-cobalt fs-md">10 Clientes Plan Mensual ($89 USD)</b>
+                <span>50 clientes</span>
+              </div>
+            </div>
+
+            <div class="p-md bg-light border-radius text-center">
+              <span class="fs-xs text-muted uppercase font-bold">Tus Ingresos Pasivos Estimados</span>
+              <div class="fs-2xl font-bold text-emerald" id="estimatedCommissionIncome">$267.00 <small class="fs-xs text-muted">USD / mes ($4,800 MXN)</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ Accordion (Harbiz Style) -->
+      <div class="card max-w-4xl mx-auto p-lg">
+        <div class="text-center mb-lg">
+          <span class="badge badge-cobalt mb-xs">RESOLUCIÓN DE DUDAS</span>
+          <h2 class="font-serif fs-2xl">Preguntas Frecuentes (FAQ)</h2>
+          <p class="text-muted fs-sm">Todo lo que necesitas saber para escalar la retención en tu club y ganar comisiones.</p>
+        </div>
+
+        <div class="faq-accordion" id="faqAccordion">
+          <div class="faq-item active">
+            <div class="faq-question">
+              <span>¿Cómo puedo generar más leads dentro del club o gimnasio?</span>
+              <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </div>
+            <div class="faq-answer">
+              Para generar leads dentro del club necesitas visibilidad y valor proactivo. Interactúa con socios que entrenan ofreciéndoles un tip biomecánico gratuito (ej. "¿Quieres un truco para activar mejor la espalda?"). Además, coloca un código QR visible en tu botella o tablet que lleve a tu WhatsApp de diagnóstico gratuito de 10 minutos.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>¿Cómo funciona el Programa de Afiliados de GymOS?</span>
+              <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </div>
+            <div class="faq-answer">
+              Al registrarte como afiliado recibes un enlace único y personalizado. Cada vez que un entrenador, nutriólogo o gimnasio se suscriba a GymOS a través de tu enlace, recibirás una comisión recurrente del 30% mes a mes mientras el cliente mantenga su suscripción activa.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>¿Quiénes pueden unirse al programa de afiliados?</span>
+              <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </div>
+            <div class="faq-answer">
+              Cualquier profesional del sector fitness y salud: entrenadores personales, nutriólogos, mentores/consultores de gimnasios, agencias de marketing fitness, escuelas de certificación, influencers y clientes satisfechos de GymOS.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>¿Cómo y cuándo se pagan las comisiones de afiliado?</span>
+              <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </div>
+            <div class="faq-answer">
+              Las comisiones se liquidan de forma trimestral o mensual directamente a tu cuenta bancaria nacional o cuenta PayPal registrada en tu panel de afiliado.
+            </div>
+          </div>
         </div>
       </div>
     </section>

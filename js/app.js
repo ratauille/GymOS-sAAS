@@ -864,6 +864,51 @@
     });
   }
 
+  // --- 9. HARBIZ-STYLE AFFILIATE & FAQ ACCORDION ENGINE ---
+  function initAffiliateAndFAQUI() {
+    // FAQ Accordion Toggle
+    const faqItems = $$('.faq-item');
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq-question');
+      question?.addEventListener('click', () => {
+        const isActive = item.classList.contains('active');
+        faqItems.forEach(i => i.classList.remove('active'));
+        if (!isActive) item.classList.add('active');
+      });
+    });
+
+    // Affiliate Link Generator
+    const nameInput = $('#affiliateNameInput');
+    const linkInput = $('#generatedAffiliateLink');
+    const copyBtn = $('#copyAffiliateLinkBtn');
+
+    nameInput?.addEventListener('input', e => {
+      const cleanName = e.target.value.trim().replace(/[^a-zA-Z0-9]/g, '') || 'Coach';
+      if (linkInput) linkInput.value = `https://ratauille.github.io/GymOS-sAAS/?aff=${cleanName}`;
+    });
+
+    copyBtn?.addEventListener('click', () => {
+      if (linkInput) {
+        navigator.clipboard.writeText(linkInput.value);
+        showToast('¡Enlace de afiliado copiado al portapapeles!', 'fa-copy');
+      }
+    });
+
+    // Affiliate Commission Calculator
+    const slider = $('#affiliateReferredCount');
+    const label = $('#referredCountLabel');
+    const incomeDisplay = $('#estimatedCommissionIncome');
+
+    slider?.addEventListener('input', e => {
+      const count = parseInt(e.target.value, 10);
+      const monthlyIncome = Math.round(count * 89 * 0.30);
+      const mxnIncome = Math.round(monthlyIncome * 18);
+
+      if (label) label.textContent = `${count} Clientes Plan Mensual ($89 USD)`;
+      if (incomeDisplay) incomeDisplay.innerHTML = `$${monthlyIncome}.00 <small class="fs-xs text-muted">USD / mes ($${mxnIncome.toLocaleString()} MXN)</small>`;
+    });
+  }
+
   // --- INITIALIZATION ENTRY POINT ---
   document.addEventListener('DOMContentLoaded', () => {
     initHeroCarousel();
@@ -874,6 +919,7 @@
     initLeadModal();
     initReminders();
     initPayPalCheckout();
+    initAffiliateAndFAQUI();
 
     console.log('GymOS Luxury Edition & Coach Shell initialized successfully.');
   });
