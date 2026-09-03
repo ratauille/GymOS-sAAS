@@ -1598,5 +1598,70 @@ body.theme-hermarfit .card {
   }
 }
 
+/* --------------------------------------------------------------------------
+   19. Distinct Value Units (.val-num & .unit-badge) & Continuous Scroll
+   -------------------------------------------------------------------------- */
+.val-num {
+  font-weight: 800;
+  color: var(--text-title);
+  letter-spacing: -0.02em;
+}
+
+.unit-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  vertical-align: middle;
+  margin-left: 0.25rem;
+  line-height: 1.2;
+}
+
+.unit-grams {
+  color: #B8860B;
+  background-color: rgba(184, 134, 11, 0.12);
+  border: 1px solid rgba(184, 134, 11, 0.3);
+}
+
+.unit-kcal {
+  color: #0F2C59;
+  background-color: rgba(15, 44, 89, 0.1);
+  border: 1px solid rgba(15, 44, 89, 0.25);
+}
+
+.unit-percent {
+  color: #10B981;
+  background-color: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.unit-currency {
+  color: #D90100;
+  background-color: rgba(217, 1, 0, 0.1);
+  border: 1px solid rgba(217, 1, 0, 0.25);
+}
+
+.unit-kg {
+  color: #3B82F6;
+  background-color: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* --- Continuous Scroll Mode (Bajar Más & Más) --- */
+body.continuous-scroll .app-section {
+  display: block !important;
+  margin-bottom: 5rem;
+  padding-bottom: 4rem;
+  border-bottom: 2px dashed var(--border-light);
+}
+
+body.continuous-scroll .hero-cinematic {
+  margin-bottom: 3rem;
+}
+
+
 
 

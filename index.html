@@ -101,6 +101,9 @@
       </nav>
 
       <div class="nav-actions">
+        <button class="btn btn-outline btn-sm" id="toggleScrollModeBtn" title="Activar vista continua hacia abajo">
+          <i class="fa-solid fa-arrows-up-down"></i> Modo Bajar Más
+        </button>
         <button class="btn btn-secondary btn-sm" id="themeToggleBtn" title="Cambiar Tema Visual">
           <i class="fa-solid fa-palette"></i> Estilo Hermarfit
         </button>
@@ -564,19 +567,19 @@
             <div class="grid grid-4 gap-sm p-sm bg-light border-radius mb-md" id="macroSummaryBox">
               <div class="text-center">
                 <span class="text-muted fs-xs uppercase fw-700">TDEE Calculado</span>
-                <div class="fs-xl fw-800 text-cobalt" id="resTDEE">2,650 <small>kcal</small></div>
+                <div class="fs-xl text-cobalt" id="resTDEE"><span class="val-num">2,650</span> <span class="unit-badge unit-kcal">KCAL</span></div>
               </div>
               <div class="text-center">
                 <span class="text-muted fs-xs uppercase fw-700">Meta Diaria</span>
-                <div class="fs-xl fw-800 text-dark" id="resCalories">2,120 <small>kcal</small></div>
+                <div class="fs-xl text-dark" id="resCalories"><span class="val-num">2,120</span> <span class="unit-badge unit-kcal">KCAL / DÍA</span></div>
               </div>
               <div class="text-center">
                 <span class="text-muted fs-xs uppercase fw-700">Proteína</span>
-                <div class="fs-xl fw-800 text-cobalt" id="resProtein">172g <small>(32%)</small></div>
+                <div class="fs-xl text-cobalt" id="resProtein"><span class="val-num">172</span> <span class="unit-badge unit-grams">g</span> <span class="unit-badge unit-percent">32%</span></div>
               </div>
               <div class="text-center">
                 <span class="text-muted fs-xs uppercase fw-700">Carbs / Grasas</span>
-                <div class="fs-xl fw-800 text-dark" id="resCarbsFat">205g C / 60g G</div>
+                <div class="fs-xl text-dark" id="resCarbsFat"><span class="val-num">205</span> <span class="unit-badge unit-grams">g C</span> / <span class="val-num">60</span> <span class="unit-badge unit-grams">g G</span></div>
               </div>
             </div>
 

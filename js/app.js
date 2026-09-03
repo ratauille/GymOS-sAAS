@@ -504,8 +504,8 @@
         return `
           <tr>
             <td><strong>${food.name}</strong></td>
-            <td><span class="grammage-badge">${grams} g</span></td>
-            <td><span>${kcal} kcal</span></td>
+            <td><span class="val-num">${grams}</span> <span class="unit-badge unit-grams">g</span></td>
+            <td><span class="val-num">${kcal}</span> <span class="unit-badge unit-kcal">kcal</span></td>
           </tr>
         `;
       }).join('');
@@ -514,7 +514,7 @@
         <div class="meal-card">
           <div class="meal-header">
             <h4><i class="fa-solid fa-utensils text-cobalt"></i> ${mealNames[mealKey]}</h4>
-            <span class="badge badge-cobalt">${mealCalories} kcal aprox.</span>
+            <span class="unit-badge unit-kcal"><span class="val-num">${mealCalories}</span> KCAL APROX.</span>
           </div>
           <table class="meal-table">
             <thead>
@@ -566,10 +566,11 @@
       state.user.fat = res.fatGrams;
       saveState();
 
-      $('#resTDEE').innerHTML = `${res.tdee.toLocaleString()} <small>kcal</small>`;
-      $('#resCalories').innerHTML = `${res.targetCalories.toLocaleString()} <small>kcal</small>`;
-      $('#resProtein').innerHTML = `${res.proteinGrams}g <small>(${Math.round((res.proteinGrams*4/res.targetCalories)*100)}%)</small>`;
-      $('#resCarbsFat').textContent = `${res.carbGrams}g C / ${res.fatGrams}g G`;
+      const pPct = Math.round((res.proteinGrams * 4 / res.targetCalories) * 100);
+      $('#resTDEE').innerHTML = `<span class="val-num">${res.tdee.toLocaleString()}</span> <span class="unit-badge unit-kcal">KCAL</span>`;
+      $('#resCalories').innerHTML = `<span class="val-num">${res.targetCalories.toLocaleString()}</span> <span class="unit-badge unit-kcal">KCAL / DÍA</span>`;
+      $('#resProtein').innerHTML = `<span class="val-num">${res.proteinGrams}</span> <span class="unit-badge unit-grams">g</span> <span class="unit-badge unit-percent">${pPct}%</span>`;
+      $('#resCarbsFat').innerHTML = `<span class="val-num">${res.carbGrams}</span> <span class="unit-badge unit-grams">g C</span> / <span class="val-num">${res.fatGrams}</span> <span class="unit-badge unit-grams">g G</span>`;
 
       $('#dashCalories').textContent = `${res.targetCalories.toLocaleString()}`;
       $('#dashMacroSummary').textContent = `${res.proteinGrams}g P | ${res.carbGrams}g C | ${res.fatGrams}g G`;
@@ -1158,6 +1159,25 @@
     });
   }
 
+  // --- 13. CONTINUOUS SCROLL MODE (BAJAR MÁS & MÁS) ---
+  function initScrollModeToggle() {
+    const scrollBtn = $('#toggleScrollModeBtn');
+    if (!scrollBtn) return;
+
+    scrollBtn.addEventListener('click', () => {
+      const isContinuous = document.body.classList.toggle('continuous-scroll');
+      if (isContinuous) {
+        scrollBtn.classList.add('active');
+        scrollBtn.innerHTML = '<i class="fa-solid fa-arrows-up-down"></i> Vista Pestañas';
+        showToast('Modo Bajar Más activo: explora todas las secciones desplazándote', 'fa-scroll');
+      } else {
+        scrollBtn.classList.remove('active');
+        scrollBtn.innerHTML = '<i class="fa-solid fa-arrows-up-down"></i> Modo Bajar Más';
+        showToast('Modo Vista Pestañas activo', 'fa-table-cells');
+      }
+    });
+  }
+
   // --- INITIALIZATION ENTRY POINT ---
   document.addEventListener('DOMContentLoaded', () => {
     initHeroCarousel();
@@ -1173,6 +1193,7 @@
     initThemeToggle();
     initAcademyModule();
     initDietPdfExport();
+    initScrollModeToggle();
 
     console.log('GymOS Luxury Edition & Coach Shell initialized successfully.');
   });
