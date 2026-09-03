@@ -1,0 +1,30 @@
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
+
+export async function createClient(cookieStore: ReturnType<typeof cookies>) {
+  const store = await cookieStore
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
+  return createServerClient(
+    supabaseUrl,
+    supabaseKey,
+    {
+      cookies: {
+        getAll() {
+          return store.getAll()
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              store.set(name, value, options)
+            )
+          } catch {
+            // Invoked from Server Component (read-only mode)
+          }
+        },
+      },
+    }
+  )
+}
