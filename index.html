@@ -37,7 +37,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- Application CSS -->
-  <link rel="stylesheet" href="css/styles.css?v=4">
+  <link rel="stylesheet" href="css/styles.css?v=5">
 
   <!-- Supabase JS Client SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -93,8 +93,11 @@
             <button class="nav-btn" data-target="section-workout">
               <i class="fa-solid fa-dumbbell"></i> Rutina & Biomecánica
             </button>
+            <button class="nav-btn" data-target="section-academy" id="navRecipePdfBtn">
+              <i class="fa-solid fa-book-open text-gold"></i> Catálogo Recetas Fitness PDF
+            </button>
             <button class="nav-btn" data-target="section-academy">
-              <i class="fa-solid fa-graduation-cap"></i> Academia Fitness
+              <i class="fa-solid fa-graduation-cap"></i> Academia Fitness & Cursos
             </button>
           </div>
         </div>
@@ -1391,6 +1394,51 @@
     </div>
   </div>
 
+  <!-- MODAL DE CATÁLOGO DE RECETAS FITNESS PDF (DOCUMENTO COMPLETO 5 RECETAS) -->
+  <div class="modal-backdrop" id="recipesPdfModal">
+    <div class="modal-card max-w-4xl" style="max-width: 880px; background: #FFFFFF;">
+      <div class="modal-header border-bottom pb-sm display-flex justify-between items-center">
+        <div class="display-flex items-center gap-sm">
+          <i class="fa-solid fa-book-open fs-xl text-gold"></i>
+          <div>
+            <span class="badge badge-gold">CATÁLOGO TÉCNICO OFICIAL</span>
+            <h3 class="modal-title fs-md">Recetario Gastronómico Fitness — Irahi Reynosa</h3>
+          </div>
+        </div>
+        <div class="display-flex gap-xs">
+          <button class="btn btn-primary btn-sm" id="printAllRecipesPdfBtn">
+            <i class="fa-solid fa-print"></i> Imprimir / Descargar PDF
+          </button>
+          <button class="btn btn-outline btn-sm close-modal-btn" data-modal="recipesPdfModal">
+            <i class="fa-solid fa-xmark"></i> Cerrar
+          </button>
+        </div>
+      </div>
+
+      <!-- Printable Area -->
+      <div class="modal-body p-lg bg-white" id="recipesPdfPrintableArea" style="background: #FFFFFF; color: #0F2C59; max-height: 80vh; overflow-y: auto;">
+        <!-- Official Document Header -->
+        <div class="display-flex justify-between items-center border-bottom pb-md mb-md">
+          <div class="display-flex items-center gap-md">
+            <img src="img/irahi-reynosa-logo.png?v=2" alt="IFA Irahi Reynosa" style="height: 60px; width: auto;">
+            <div>
+              <h2 class="fs-lg font-serif fw-800 text-cobalt mb-xs" style="margin: 0; color: #0F2C59;">CATÁLOGO DE RECETAS FITNESS</h2>
+              <span class="fs-xs text-muted" style="color: #64748B;">Ingeniería Gastronómica & Nutrición de Precisión — IFA Irahi Reynosa</span>
+            </div>
+          </div>
+          <div class="text-right fs-xs">
+            <div style="color: #64748B;">Estandarización de Gramajes</div>
+            <div class="fw-700 text-gold" style="font-size: 0.8rem;">EDICIÓN ÉLITE COMPLETA</div>
+          </div>
+        </div>
+
+        <div id="fullRecipesPdfContainer">
+          <!-- Dynamically populated with all 5 recipes -->
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- TOAST NOTIFICATION CONTAINER -->
   <div id="toastContainer" class="toast-container"></div>
 
@@ -1406,7 +1454,7 @@
   </script>
 
   <!-- APPLICATION JAVASCRIPT -->
-  <script src="js/app.js?v=3"></script>
+  <script src="js/app.js?v=5"></script>
 
   <!-- Wati Astra AI Chat & Support Widget -->
   <script src="https://astra.wati.io/widget/astra.js" id="e7a13d79-200d-43c0-a3d2-117843d27c55" data-mode="ai_bar" data-from="instruction" defer></script>

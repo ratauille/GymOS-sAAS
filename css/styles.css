@@ -1655,17 +1655,41 @@ body.theme-hermarfit .card {
 
   #dietPdfModal,
   #dietPdfModal #pdfPrintableArea,
-  #dietPdfModal #pdfPrintableArea * {
+  #dietPdfModal #pdfPrintableArea *,
+  #recipesPdfModal,
+  #recipesPdfModal #recipesPdfPrintableArea,
+  #recipesPdfModal #recipesPdfPrintableArea * {
     visibility: visible !important;
   }
 
-  #dietPdfModal {
+  #dietPdfModal,
+  #recipesPdfModal {
     position: absolute !important;
     left: 0 !important;
     top: 0 !important;
     width: 100% !important;
     height: auto !important;
     background: #FFFFFF !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .modal-backdrop {
+    background: #FFFFFF !important;
+  }
+
+  .modal-card {
+    box-shadow: none !important;
+    border: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .modal-header, .close-modal-btn, #printPdfDocumentBtn, #printAllRecipesPdfBtn {
+    display: none !important;
+  }
+}
     box-shadow: none !important;
     border: none !important;
   }

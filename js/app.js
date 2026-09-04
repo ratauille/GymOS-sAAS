@@ -1333,6 +1333,10 @@
     const dropdown = $('#recipeSelectDropdown');
     const viewer = $('#recipeViewer');
     const printBtn = $('#printRecipePdfBtn');
+    const navPdfBtn = $('#navRecipePdfBtn');
+    const pdfModal = $('#recipesPdfModal');
+    const printAllBtn = $('#printAllRecipesPdfBtn');
+    const fullContainer = $('#fullRecipesPdfContainer');
 
     if (!dropdown || !viewer) return;
 
@@ -1395,11 +1399,82 @@
       `;
     }
 
+    function populateFullPdfModal() {
+      if (!fullContainer) return;
+      
+      let html = '';
+      Object.values(RECIPES_DATABASE).forEach((r, idx) => {
+        const ingredientsRows = r.ingredients.map(i => `
+          <tr>
+            <td style="padding: 6px 10px; border-bottom: 1px solid #E2E8F0;"><strong>${i.name}</strong></td>
+            <td style="padding: 6px 10px; border-bottom: 1px solid #E2E8F0;"><span>${i.grams}</span></td>
+            <td style="padding: 6px 10px; border-bottom: 1px solid #E2E8F0; font-size: 0.75rem; color: #64748B;">${i.note}</td>
+          </tr>
+        `).join('');
+
+        const stepsHtml = r.steps.map(s => `<p style="margin-bottom: 6px; font-size: 0.78rem; line-height: 1.5; color: #1E293B;">${s}</p>`).join('');
+
+        html += `
+          <div class="pdf-recipe-card" style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px dashed #CBD5E1; page-break-inside: avoid;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <div>
+                <span class="badge badge-gold" style="font-size: 0.68rem;">RECETA #${idx + 1} — ${r.category}</span>
+                <h3 style="font-family: serif; font-size: 1.15rem; color: #0F2C59; margin: 4px 0 0 0;">${r.title}</h3>
+                <span style="font-size: 0.75rem; color: #64748B;">Prep: ${r.prepTime} • Dificultad: ${r.difficulty} • Enfoque: ${r.focus}</span>
+              </div>
+              <div style="display: flex; gap: 8px; font-size: 0.75rem; text-align: center;">
+                <div style="padding: 4px 8px; background: #F1F5F9; border-radius: 6px;"><strong>${r.calories}</strong> kcal</div>
+                <div style="padding: 4px 8px; background: #F1F5F9; border-radius: 6px;"><strong>${r.protein}g</strong> P</div>
+                <div style="padding: 4px 8px; background: #F1F5F9; border-radius: 6px;"><strong>${r.carbs}g</strong> C</div>
+                <div style="padding: 4px 8px; background: #F1F5F9; border-radius: 6px;"><strong>${r.fat}g</strong> G</div>
+                <div style="padding: 4px 8px; background: #FEF3C7; color: #78350F; border-radius: 6px;"><strong>${r.fiber}g</strong> Fibra</div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+              <div>
+                <h4 style="font-size: 0.85rem; color: #0F2C59; border-bottom: 1px solid #0F2C59; padding-bottom: 4px; margin-bottom: 8px;">Ingredientes & Gramajes</h4>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.78rem;">
+                  <thead>
+                    <tr style="background: #F8FAFC; text-align: left;">
+                      <th style="padding: 4px 10px;">Ingrediente</th>
+                      <th style="padding: 4px 10px;">Cantidad</th>
+                      <th style="padding: 4px 10px;">Aporte</th>
+                    </tr>
+                  </thead>
+                  <tbody>${ingredientsRows}</tbody>
+                </table>
+              </div>
+              <div>
+                <h4 style="font-size: 0.85rem; color: #0F2C59; border-bottom: 1px solid #0F2C59; padding-bottom: 4px; margin-bottom: 8px;">Método de Preparación</h4>
+                <div style="padding: 8px; background: #F8FAFC; border-radius: 6px; border: 1px solid #E2E8F0; margin-bottom: 8px;">${stepsHtml}</div>
+                <div style="padding: 8px; background: #FFFBEB; border: 1px solid #FCD34D; border-radius: 6px; font-size: 0.75rem; color: #78350F;">
+                  <strong>Tip del Chef:</strong> ${r.chefTip}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      fullContainer.innerHTML = html;
+    }
+
     dropdown.addEventListener('change', () => {
       renderRecipe(dropdown.value);
     });
 
     printBtn?.addEventListener('click', () => {
+      populateFullPdfModal();
+      pdfModal?.classList.add('active');
+    });
+
+    navPdfBtn?.addEventListener('click', () => {
+      populateFullPdfModal();
+      pdfModal?.classList.add('active');
+    });
+
+    printAllBtn?.addEventListener('click', () => {
       window.print();
     });
 
