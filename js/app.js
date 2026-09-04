@@ -784,9 +784,14 @@
       saveState();
       renderLeadsTable();
 
+      // Firebase Firestore Cloud Sync
+      if (window.GymOSFirebase && window.GymOSFirebase.saveLead) {
+        window.GymOSFirebase.saveLead(newLead);
+      }
+
       form.reset();
       closeModal();
-      showToast(`¡Lead capturado exitosamente! Visible en CRM y Dashboard.`, 'fa-user-check');
+      showToast(`¡Lead capturado exitosamente! Sincronizado en Firebase & CRM.`, 'fa-user-check');
       showSection('section-leads');
     });
 
