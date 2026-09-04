@@ -37,7 +37,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- Application CSS -->
-  <link rel="stylesheet" href="css/styles.css?v=2">
+  <link rel="stylesheet" href="css/styles.css?v=3">
 
   <!-- Supabase JS Client SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1077,10 +1077,40 @@
       </div>
     <!-- SECTION 8: ACADEMIA FITNESS & MASTERCLASSES (ESTILO HERMARFIT EDUCATION) -->
     <section id="section-academy" class="app-section">
-      <div class="section-header text-center max-w-2xl mx-auto">
-        <span class="section-subtitle"><i class="fa-solid fa-graduation-cap text-gold"></i> FORMACIÓN CONTINUA DE ALTO NIVEL</span>
+      <div class="section-header text-center max-w-2xl mx-auto mb-lg">
+        <span class="section-subtitle"><i class="fa-solid fa-graduation-cap text-gold"></i> FORMACIÓN CONTINUA & RECETARIO ÉLITE</span>
         <h2 class="section-title">Academia Fitness GymOS (Hermarfit Education Style)</h2>
-        <p class="text-muted">Masterclasses especializadas para entrenadores, nutriólogos y atletas que buscan dominar la biomecánica, la nutrición y el crecimiento del negocio.</p>
+        <p class="text-muted">Masterclasses especializadas y Catálogo Gastronómico de Recetas Fitness con estandarización de gramajes y desgloses de macronutrientes.</p>
+      </div>
+
+      <!-- CATÁLOGO GASTRONÓMICO DE RECETAS FITNESS (PDF REFINADO & MENÚ DESPLEGABLE) -->
+      <div class="card max-w-4xl mx-auto p-lg mb-xl shadow-md" id="recipesCatalogContainer" style="border: 2px solid var(--gold-border);">
+        <div class="section-header border-bottom pb-sm mb-md display-flex justify-between items-center flex-wrap gap-sm">
+          <div>
+            <span class="badge badge-gold mb-xs"><i class="fa-solid fa-book-open"></i> INGENIERÍA GASTRONÓMICA</span>
+            <h3 class="font-serif fs-lg text-cobalt" style="margin:0;">Catálogo Gastronómico de Recetas Fitness</h3>
+            <p class="fs-xs text-muted" style="margin:0;">Pesaje exacto en gramos/ml, macronutrientes calculados y métodos de preparación paso a paso.</p>
+          </div>
+
+          <!-- Recipe Dropdown Menu (Menú Desplegable de Recetas) -->
+          <div class="display-flex items-center gap-xs">
+            <select id="recipeSelectDropdown" class="form-control font-bold text-cobalt" style="min-width: 280px; border: 2px solid var(--cobalt-border); font-size: 0.85rem;">
+              <option value="receta-1">1. Bowl de Avena Proteica con Frutos Rojos y Chía (385 kcal)</option>
+              <option value="receta-2">2. Pechuga de Pollo al Limón con Quinoa y Espárragos (450 kcal)</option>
+              <option value="receta-3">3. Salmón a la Plancha con Puré de Camote y Brócoli (520 kcal)</option>
+              <option value="receta-4">4. Toast Integral de Masa Madre con Aguacate y Huevo Poché (360 kcal)</option>
+              <option value="receta-5">5. Tataki de Atún Sellado con Edamames y Espinacas Baby (395 kcal)</option>
+            </select>
+            <button class="btn btn-primary btn-sm" id="printRecipePdfBtn">
+              <i class="fa-solid fa-file-pdf"></i> Imprimir Receta PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Recipe Content Viewer -->
+        <div id="recipeViewer" class="p-md border-radius bg-light" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+          <!-- Dynamically populated by JS based on recipeSelectDropdown -->
+        </div>
       </div>
 
       <!-- Course Cards Grid -->
@@ -1170,36 +1200,6 @@
           <div class="progress-bar-bg" style="background: #E2E8F0; height: 10px; border-radius: 6px; overflow: hidden;">
             <div class="progress-bar-fill" id="courseProgressBarFill" style="background: var(--cobalt-dark); height: 100%; width: 35%; transition: width 0.4s ease;"></div>
           </div>
-        </div>
-      </div>
-
-      <!-- CATÁLOGO GASTRONÓMICO DE RECETAS FITNESS (PDF REFINADO & MENÚ DESPLEGABLE) -->
-      <div class="card max-w-4xl mx-auto p-lg mt-xl" id="recipesCatalogContainer">
-        <div class="section-header border-bottom pb-sm mb-md display-flex justify-between items-center flex-wrap gap-sm">
-          <div>
-            <span class="badge badge-gold mb-xs"><i class="fa-solid fa-book-open"></i> INGENIERÍA GASTRONÓMICA</span>
-            <h3 class="font-serif fs-lg text-cobalt">Catálogo de Recetas Fitness & Estandarización</h3>
-            <p class="fs-xs text-muted">Pesaje exacto en gramos/ml, macronutrientes calculados y métodos de preparación paso a paso.</p>
-          </div>
-
-          <!-- Recipe Dropdown Menu (Menú Desplegable de Recetas) -->
-          <div class="display-flex items-center gap-xs">
-            <select id="recipeSelectDropdown" class="form-control font-bold text-cobalt" style="min-width: 280px; border: 2px solid var(--cobalt-border);">
-              <option value="receta-1">1. Bowl de Avena Proteica con Frutos Rojos y Chía (385 kcal)</option>
-              <option value="receta-2">2. Pechuga de Pollo al Limón con Quinoa y Espárragos (450 kcal)</option>
-              <option value="receta-3">3. Salmón a la Plancha con Puré de Camote y Brócoli (520 kcal)</option>
-              <option value="receta-4">4. Toast Integral de Masa Madre con Aguacate y Huevo Poché (360 kcal)</option>
-              <option value="receta-5">5. Tataki de Atún Sellado con Edamames y Espinacas Baby (395 kcal)</option>
-            </select>
-            <button class="btn btn-primary btn-sm" id="printRecipePdfBtn">
-              <i class="fa-solid fa-file-pdf"></i> Imprimir Receta PDF
-            </button>
-          </div>
-        </div>
-
-        <!-- Recipe Content Viewer -->
-        <div id="recipeViewer" class="p-md border-radius bg-light" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
-          <!-- Dynamically populated by JS based on recipeSelectDropdown -->
         </div>
       </div>
     </section>
@@ -1366,7 +1366,7 @@
   </script>
 
   <!-- APPLICATION JAVASCRIPT -->
-  <script src="js/app.js"></script>
+  <script src="js/app.js?v=3"></script>
 
   <!-- Wati Astra AI Chat & Support Widget -->
   <script src="https://astra.wati.io/widget/astra.js" id="e7a13d79-200d-43c0-a3d2-117843d27c55" data-mode="ai_bar" data-from="instruction" defer></script>
