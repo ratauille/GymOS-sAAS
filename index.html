@@ -138,36 +138,65 @@
   <!-- MAIN CONTAINER -->
   <main class="main-content">
 
-    <!-- CINEMATIC MOTIVATIONAL HERO -->
-    <section class="hero-cinematic">
-      <div class="hero-watermark"></div>
-      <div class="hero-overlay"></div>
+    <!-- BANNER PRINCIPAL (FOTO / WATERMARK DEL GIMNASIO CON FILTRO CLEAN DARK & TURQUESA NEÓN) -->
+    <section class="hero-cinematic hero-clean-dark">
+      <!-- Contenedor de la Imagen / Watermark con viñeta desaturada -->
+      <div class="hero-bg-wrapper">
+        <img 
+          src="img/irahi-reynosa-logo.png?v=2" 
+          alt="IFA Irahi Reynosa Logo Watermark" 
+          class="hero-watermark-img"
+        />
+        <!-- Gradiente superior e inferior para fundir con el fondo negro -->
+        <div class="hero-gradient-overlay"></div>
+        <!-- Viñeta radial oscura para centrar la vista en el texto -->
+        <div class="hero-radial-vignette"></div>
+      </div>
+
+      <!-- Contenido Central Espaciado -->
       <div class="hero-content">
-        <div class="hero-brand-header mb-sm">
-          <img src="img/irahi-reynosa-logo.png?v=2" alt="IFA Irahi Reynosa Logo" class="hero-logo-img">
+        <!-- Badge Superior con Mancuerna Turquesa Neón -->
+        <div class="neon-badge">
+          <svg class="neon-dumbbell" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M5 9h1a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1zm-3 2h1v2H2v-2zm17-2h1a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1zm3 2h1v2h-1v-2zM7 11h10v2H7z"/>
+          </svg>
+          <span class="neon-badge-text">
+            Ingeniería de Rendimiento Humano • Irahi Reynosa
+          </span>
         </div>
-        <span class="hero-tag"><i class="fa-solid fa-sparkles"></i> INGENIERÍA DE RENDIMIENTO HUMANO • IRAHI REYNOSA</span>
-        
-        <!-- Motivational Phrases Carousel (Fade In / Fade Out) -->
+
+        <!-- Cita Central (Carrusel de Filosofía de Lujo) -->
         <div class="quote-carousel" id="quoteCarousel">
           <div class="quote-item active">
-            <h1 class="quote-text">"La excelencia no es un acto aislado, sino la armonía perfecta entre nutrición exacta y movimiento biomecánico impecable."</h1>
-            <p class="quote-author">— GYMOS ELITE PHILOSOPHY</p>
+            <blockquote class="hero-quote-text">
+              “La excelencia no es un acto aislado, sino la armonía perfecta entre nutrición exacta y movimiento biomecánico impecable.”
+            </blockquote>
+            <span class="hero-quote-sub">— GYMOS ELITE PHILOSOPHY</span>
           </div>
+
           <div class="quote-item">
-            <h1 class="quote-text">"Transforma datos biométricos en resultados esculpidos con precisión científica y disciplina inquebrantable."</h1>
-            <p class="quote-author">— ARCHITECTURE OF BODY & MIND</p>
+            <blockquote class="hero-quote-text">
+              “Transforma datos biométricos en resultados esculpidos con precisión científica y disciplina inquebrantable.”
+            </blockquote>
+            <span class="hero-quote-sub">— ARCHITECTURE OF BODY & MIND</span>
           </div>
+
           <div class="quote-item">
-            <h1 class="quote-text">"El lujo supremo es el control total sobre tu metabolismo, fuerza y longevidad física."</h1>
-            <p class="quote-author">— HIGH PERFORMANCE LIFESTYLE</p>
+            <blockquote class="hero-quote-text">
+              “El lujo supremo es el control total sobre tu metabolismo, fuerza y longevidad física.”
+            </blockquote>
+            <span class="hero-quote-sub">— HIGH PERFORMANCE LIFESTYLE</span>
           </div>
+
           <div class="quote-item">
-            <h1 class="quote-text">"Diseña tu cuerpo con la misma elegancia y rigor con que los grandes maestros construyen el arte."</h1>
-            <p class="quote-author">— BIOMECHANICAL PERFECTION</p>
+            <blockquote class="hero-quote-text">
+              “Diseña tu cuerpo con la misma elegancia y rigor con que los grandes maestros construyen el arte.”
+            </blockquote>
+            <span class="hero-quote-sub">— BIOMECHANICAL PERFECTION</span>
           </div>
         </div>
 
+        <!-- Paginadores Minimalistas Neón Turquesa -->
         <div class="hero-indicators" id="carouselIndicators">
           <span class="indicator active" data-index="0"></span>
           <span class="indicator" data-index="1"></span>
