@@ -694,48 +694,48 @@
   // --- 6. CRM LEADS & CAPTACIÓN MARKETING ---
   function renderLeadsTable() {
     const tbody = $('#leadsTableBody');
+    const dashTbody = $('#dashboardLeadsTableBody');
     const badge = $('#leadCountBadge');
-    if (!tbody) return;
 
     if (badge) badge.textContent = `${state.leads.length} Prospectos Registrados`;
 
-    if (!state.leads.length) {
-      tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted p-lg">No hay prospectos capturados en el CRM local.</td></tr>`;
-      return;
-    }
+    const htmlContent = !state.leads.length
+      ? `<tr><td colspan="7" class="text-center text-muted p-lg">No hay prospectos capturados en el CRM local.</td></tr>`
+      : state.leads.map(lead => {
+          let statusBadge = 'badge-cobalt';
+          if (lead.status === 'Nuevo') statusBadge = 'badge-gold';
+          if (lead.status === 'Suscrito VIP') statusBadge = 'badge-success';
 
-    tbody.innerHTML = state.leads.map(lead => {
-      let statusBadge = 'badge-cobalt';
-      if (lead.status === 'Nuevo') statusBadge = 'badge-gold';
-      if (lead.status === 'Suscrito VIP') statusBadge = 'badge-success';
+          const encodedMsg = encodeURIComponent(`Hola ${lead.name}, te saludamos de GymOS. Vimos tu interés en el ${lead.planInterest}. ¿Te gustaría agendar tu consulta biomecánica?`);
+          const whatsappUrl = `https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}?text=${encodedMsg}`;
 
-      const encodedMsg = encodeURIComponent(`Hola ${lead.name}, te saludamos de GymOS Luxury. Vimos tu interés en el ${lead.planInterest}. ¿Te gustaría agendar tu consulta biomecánica?`);
-      const whatsappUrl = `https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}?text=${encodedMsg}`;
+          return `
+            <tr>
+              <td class="fs-xs text-muted">${lead.date}</td>
+              <td><strong>${lead.name}</strong></td>
+              <td>
+                <div class="fs-xs"><i class="fa-solid fa-envelope text-muted"></i> ${lead.email}</div>
+                <div class="fs-xs"><i class="fa-solid fa-phone text-muted"></i> ${lead.phone}</div>
+              </td>
+              <td class="fs-sm">${lead.goal}</td>
+              <td class="fs-sm fw-700 text-cobalt">${lead.planInterest}</td>
+              <td><span class="badge ${statusBadge}">${lead.status}</span></td>
+              <td>
+                <div class="display-flex gap-xs">
+                  <a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn btn-xs btn-outline">
+                    <i class="fa-brands fa-whatsapp"></i> Contactar
+                  </a>
+                  <button class="btn btn-xs btn-secondary delete-lead-btn" data-id="${lead.id}">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
 
-      return `
-        <tr>
-          <td class="fs-xs text-muted">${lead.date}</td>
-          <td><strong>${lead.name}</strong></td>
-          <td>
-            <div class="fs-xs"><i class="fa-solid fa-envelope text-muted"></i> ${lead.email}</div>
-            <div class="fs-xs"><i class="fa-solid fa-phone text-muted"></i> ${lead.phone}</div>
-          </td>
-          <td class="fs-sm">${lead.goal}</td>
-          <td class="fs-sm fw-700 text-cobalt">${lead.planInterest}</td>
-          <td><span class="badge ${statusBadge}">${lead.status}</span></td>
-          <td>
-            <div class="display-flex gap-xs">
-              <a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn btn-xs btn-outline">
-                <i class="fa-brands fa-whatsapp"></i> Contactar
-              </a>
-              <button class="btn btn-xs btn-secondary delete-lead-btn" data-id="${lead.id}">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-      `;
-    }).join('');
+    if (tbody) tbody.innerHTML = htmlContent;
+    if (dashTbody) dashTbody.innerHTML = htmlContent;
 
     $$('.delete-lead-btn').forEach(b => {
       b.addEventListener('click', () => {
@@ -786,7 +786,8 @@
 
       form.reset();
       closeModal();
-      showToast(`¡Lead capturado exitosamente! Enviado a CRM.`, 'fa-user-check');
+      showToast(`¡Lead capturado exitosamente! Visible en CRM y Dashboard.`, 'fa-user-check');
+      showSection('section-leads');
     });
 
     renderLeadsTable();

@@ -392,6 +392,39 @@
           </div>
         </div>
       </div>
+
+      <!-- RESUMEN RÁPIDO DE CLIENTES & LEADS CAPTURADOS EN DASHBOARD -->
+      <div class="card mt-lg" id="dashboardLeadsCard">
+        <div class="card-header display-flex justify-between items-center flex-wrap gap-xs">
+          <div>
+            <h3><i class="fa-solid fa-users text-cobalt"></i> Prospectos & Clientes Capturados en Tiempo Real</h3>
+            <p class="fs-xs text-muted">Bandeja de entrada de leads capturados desde el modal, BioLink y sitio web.</p>
+          </div>
+          <button class="btn btn-primary btn-sm nav-btn" data-target="section-leads">
+            <i class="fa-solid fa-address-book"></i> Ver Todos los Leads en CRM
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table" id="dashboardLeadsTable">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Cliente Prospecto</th>
+                  <th>Contacto Directo</th>
+                  <th>Objetivo Declarado</th>
+                  <th>Plan de Interés</th>
+                  <th>Estatus</th>
+                  <th>Acción Rápida WhatsApp</th>
+                </tr>
+              </thead>
+              <tbody id="dashboardLeadsTableBody">
+                <!-- Rendered dynamically via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- SECTION NEW: TERMINAL COACH SHELL (CLI EN INTERFAZ WEB) -->
