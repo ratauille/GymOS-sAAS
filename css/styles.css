@@ -421,26 +421,43 @@ p {
   z-index: 0;
 }
 
+.hero-clean-dark .hero-gym-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.22;
+  filter: grayscale(100%) contrast(120%);
+  pointer-events: none;
+}
+
 .hero-clean-dark .hero-watermark-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
   object-position: center;
-  opacity: 0.20;
+  opacity: 0.25;
   filter: grayscale(100%) contrast(110%);
   padding: 3rem;
+  pointer-events: none;
 }
 
 .hero-clean-dark .hero-gradient-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(to bottom, #08090b 0%, rgba(8, 9, 11, 0.6) 50%, #08090b 100%);
+  pointer-events: none;
 }
 
 .hero-clean-dark .hero-radial-vignette {
   position: absolute;
   inset: 0;
   background: radial-gradient(ellipse at center, transparent 0%, rgba(8, 9, 11, 0.7) 60%, #08090b 100%);
+  pointer-events: none;
 }
 
 .neon-badge {
