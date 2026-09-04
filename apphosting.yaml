@@ -1,0 +1,12 @@
+# Firebase App Hosting Configuration for GymOS SaaS
+headers:
+  - glob: "**/*"
+    headers:
+      - key: Cache-Control
+        value: max-age=3600
+
+env:
+  - variable: NEXT_PUBLIC_SUPABASE_URL
+    value: "https://xgtaukrydufhojokyhyd.supabase.co"
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: "gymos-saas"

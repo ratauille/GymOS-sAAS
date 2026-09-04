@@ -1,0 +1,7 @@
+specVersion: "v1alpha"
+serviceId: "gymos-saas-service"
+location: "us-central1"
+schema:
+  source: "./schema"
+connectorDirs:
+  - "./connector"

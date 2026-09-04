@@ -1,0 +1,57 @@
+# GymOS Luxury SaaS - Firebase Data Connect GraphQL & PostgreSQL Schema
+
+type Gym @table {
+  id: UUID! @default(expr: "uuidV4()")
+  name: String!
+  slug: String!
+  ownerId: String!
+  createdAt: Timestamp! @default(expr: "request.time")
+}
+
+type Profile @table {
+  id: UUID! @default(expr: "uuidV4()")
+  fullName: String!
+  email: String!
+  phone: String
+  role: String!
+  gymId: UUID
+  createdAt: Timestamp! @default(expr: "request.time")
+}
+
+type Client @table {
+  id: UUID! @default(expr: "uuidV4()")
+  coachId: UUID!
+  fullName: String!
+  age: Int!
+  gender: String!
+  weightKg: Float!
+  heightCm: Float!
+  activityLevel: Float!
+  goal: String!
+  createdAt: Timestamp! @default(expr: "request.time")
+}
+
+type Diet @table {
+  id: UUID! @default(expr: "uuidV4()")
+  clientId: UUID!
+  createdBy: UUID!
+  title: String!
+  dietType: String!
+  targetCalories: Int!
+  proteinGrams: Int!
+  carbGrams: Int!
+  fatGrams: Int!
+  mealsJson: String!
+  createdAt: Timestamp! @default(expr: "request.time")
+}
+
+type Lead @table {
+  id: UUID! @default(expr: "uuidV4()")
+  fullName: String!
+  email: String!
+  phone: String!
+  goal: String!
+  planInterest: String!
+  status: String! @default(value: "Nuevo")
+  createdAt: Timestamp! @default(expr: "request.time")
+}
