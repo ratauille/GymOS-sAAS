@@ -281,11 +281,13 @@ export default function GymOSMainApp() {
 
       {/* BANNER PRINCIPAL (FOTO REAL DE MANCUERNAS CON MOVIMIENTO KEN BURNS DE ZOOM LENTO) */}
       <section className="relative h-[440px] w-full flex items-center justify-center overflow-hidden border-b-2 border-[#00f2fe]/40 shadow-2xl bg-black">
-        {/* Foto de Fondo Real con Animación de Movimiento Continuous Zoom */}
-        <img
-          src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1920&q=80"
-          alt="Rack de Mancuernas Gimnasio Élite"
-          className="absolute inset-0 w-full h-full object-cover opacity-40 filter contrast-125 brightness-90 hero-motion-img"
+        {/* Foto Real de Gimnasio & Fuerza (Entrenamiento de Alta Precisión) con Animación Continuous Zoom */}
+        <Image
+          src="/img/hero-banner.jpg"
+          alt="GymOS Fuerza & Entrenamiento Real"
+          fill
+          priority
+          className="object-cover object-center opacity-55 filter contrast-125 brightness-95 hero-motion-img"
         />
         {/* Watermark Logo Irahi Reynosa */}
         <Image
