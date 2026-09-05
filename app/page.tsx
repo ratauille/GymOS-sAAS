@@ -51,29 +51,45 @@ export default function GymOSMainApp() {
     "dashboard" | "coach-shell" | "nutrition" | "workout" | "academy" | "checkout"
   >("dashboard");
 
-  const [currentUser, setCurrentUser] = useState<UserState>({
-    name: "Carlos Mendoza",
-    email: "carlos.mendoza@luxury.com",
-    age: 29,
-    gender: "male",
-    weight: 76.4,
-    targetWeight: 74.0,
-    height: 178,
-    activity: 1.55,
-    goal: "fatloss",
-    dietType: "omnivore",
-    tdee: 2650,
-    targetCalories: 2120,
-    membership: "Plan Mensual Élite",
-    paymentStatus: "Activo Élite VIP"
+  const [currentUser, setCurrentUser] = useState<UserState>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("gymos_user");
+      if (saved) {
+        try { return JSON.parse(saved); } catch (e) { }
+      }
+    }
+    return {
+      name: "Carlos Mendoza",
+      email: "carlos.mendoza@luxury.com",
+      age: 29,
+      gender: "male",
+      weight: 76.4,
+      targetWeight: 74.0,
+      height: 178,
+      activity: 1.55,
+      goal: "fatloss",
+      dietType: "omnivore",
+      tdee: 2650,
+      targetCalories: 2120,
+      membership: "Plan Mensual Élite",
+      paymentStatus: "Activo Élite VIP"
+    };
   });
 
-  const [checkins, setCheckins] = useState<CheckinItem[]>([
-    { id: "ck-1", userId: "carlos.mendoza@luxury.com", week: 1, date: "2026-08-01", weight: 78.5, waistCm: 88, adherencePct: 92, pressLoadKg: 70, squatLoadKg: 100, status: "Verificado" },
-    { id: "ck-2", userId: "carlos.mendoza@luxury.com", week: 2, date: "2026-08-08", weight: 77.8, waistCm: 87, adherencePct: 95, pressLoadKg: 72.5, squatLoadKg: 105, status: "Verificado" },
-    { id: "ck-3", userId: "carlos.mendoza@luxury.com", week: 3, date: "2026-08-15", weight: 77.1, waistCm: 86, adherencePct: 90, pressLoadKg: 75, squatLoadKg: 110, status: "Verificado" },
-    { id: "ck-4", userId: "carlos.mendoza@luxury.com", week: 4, date: "2026-08-22", weight: 76.4, waistCm: 85, adherencePct: 96, pressLoadKg: 77.5, squatLoadKg: 112.5, status: "Élite Verificado" }
-  ]);
+  const [checkins, setCheckins] = useState<CheckinItem[]>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("gymos_checkins");
+      if (saved) {
+        try { return JSON.parse(saved); } catch (e) { }
+      }
+    }
+    return [
+      { id: "ck-1", userId: "carlos.mendoza@luxury.com", week: 1, date: "2026-08-01", weight: 78.5, waistCm: 88, adherencePct: 92, pressLoadKg: 70, squatLoadKg: 100, status: "Verificado" },
+      { id: "ck-2", userId: "carlos.mendoza@luxury.com", week: 2, date: "2026-08-08", weight: 77.8, waistCm: 87, adherencePct: 95, pressLoadKg: 72.5, squatLoadKg: 105, status: "Verificado" },
+      { id: "ck-3", userId: "carlos.mendoza@luxury.com", week: 3, date: "2026-08-15", weight: 77.1, waistCm: 86, adherencePct: 90, pressLoadKg: 75, squatLoadKg: 110, status: "Verificado" },
+      { id: "ck-4", userId: "carlos.mendoza@luxury.com", week: 4, date: "2026-08-22", weight: 76.4, waistCm: 85, adherencePct: 96, pressLoadKg: 77.5, squatLoadKg: 112.5, status: "Élite Verificado" }
+    ];
+  });
 
   // Terminal & Loggers State
   const [terminalLogs, setTerminalLogs] = useState<string[]>([
@@ -83,11 +99,38 @@ export default function GymOSMainApp() {
   const [terminalInput, setTerminalInput] = useState("");
   
   // Custom Routine & Loads per User
-  const [workoutLoads, setWorkoutLoads] = useState<Record<string, number>>({
-    "push-1": 77.5,
-    "pull-1": 85.0,
-    "legs-1": 112.5
+  const [workoutLoads, setWorkoutLoads] = useState<Record<string, number>>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("gymos_loads");
+      if (saved) {
+        try { return JSON.parse(saved); } catch (e) { }
+      }
+    }
+    return {
+      "push-1": 77.5,
+      "pull-1": 85.0,
+      "legs-1": 112.5
+    };
   });
+
+  // Sync to localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("gymos_user", JSON.stringify(currentUser));
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("gymos_checkins", JSON.stringify(checkins));
+    }
+  }, [checkins]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("gymos_loads", JSON.stringify(workoutLoads));
+    }
+  }, [workoutLoads]);
 
   // Modal Recipe State
   const [selectedRecipePdf, setSelectedRecipePdf] = useState<any | null>(null);
