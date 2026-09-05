@@ -3,10 +3,15 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { syncUserToFirestore, syncCheckinToFirestore, syncLeadToFirestore } from "@/lib/firebase";
+import { CrmDashboard } from "@/components/dashboard/crm-dashboard";
+import { NutritionSection } from "@/components/nutrition/nutrition-section";
+import { WorkoutSection } from "@/components/workout/workout-section";
+import { DomainGuide } from "@/components/domain/domain-guide";
+import { LeadCta } from "@/components/marketing/lead-cta";
 import { 
   Users, DollarSign, Calendar, Dumbbell, Utensils, Flame, Sparkles, 
   ShieldCheck, CheckCircle2, Crown, CreditCard, Activity, FileText, 
-  Download, Send, Terminal, ChevronDown, Lock, Award, HeartPulse
+  Download, Send, Terminal, ChevronDown, Lock, Award, HeartPulse, Globe
 } from "lucide-react";
 
 export interface UserState {
@@ -40,13 +45,6 @@ export interface CheckinItem {
   status: string;
 }
 
-export interface ExerciseLoad {
-  exerciseId: string;
-  exerciseName: string;
-  weightKg: number;
-  date: string;
-}
-
 function PaywallNotice({ onGoToCheckout }: { onGoToCheckout: () => void }) {
   return (
     <div className="bg-gray-900/90 border border-amber-500/40 p-8 rounded-3xl text-center max-w-2xl mx-auto space-y-5 animate-in fade-in">
@@ -60,7 +58,7 @@ function PaywallNotice({ onGoToCheckout }: { onGoToCheckout: () => void }) {
         Acceso Restringido a Clientes Públicos
       </h3>
       <p className="text-gray-300 text-xs leading-relaxed max-w-lg mx-auto">
-        Esta sección (dietas por gramos, rutinas biomecánicas y consola de seguimiento) requiere una suscripción activa. El Propietario y el Gerente cuentan con <strong>Acceso Total Gratuito</strong> permanente.
+        Esta sección (dietas por gramos con PDF, rutinas biomecánicas completas Push/Pull/Legs y consola Coach Shell) requiere una suscripción activa. El Propietario y el Gerente cuentan con <strong>Acceso Total Gratuito</strong> permanente.
       </p>
       <button
         onClick={onGoToCheckout}
@@ -73,9 +71,8 @@ function PaywallNotice({ onGoToCheckout }: { onGoToCheckout: () => void }) {
 }
 
 export default function GymOSMainApp() {
-  // --- ESTADO UBICADO POR USUARIO ---
   const [activeTab, setActiveTab] = useState<
-    "dashboard" | "coach-shell" | "nutrition" | "workout" | "academy" | "checkout"
+    "dashboard" | "coach-shell" | "nutrition" | "workout" | "domain" | "checkout"
   >("dashboard");
 
   const [currentUser, setCurrentUser] = useState<UserState>(() => {
@@ -108,7 +105,7 @@ export default function GymOSMainApp() {
     };
   });
 
-  // Evaluación de Acceso Maestro (Tú y el Gerente no pagan jamás)
+  // Evaluación de Acceso Maestro (Propietario y Gerente no pagan jamás)
   const isMasterUser = currentUser.role === "admin" || currentUser.role === "gerente";
   const hasFullAccess = isMasterUser || currentUser.paymentStatus === "Activo Élite VIP";
 
@@ -127,50 +124,12 @@ export default function GymOSMainApp() {
     ];
   });
 
-  // Terminal & Loggers State
+  // Terminal State
   const [terminalLogs, setTerminalLogs] = useState<string[]>([
     "GymOS Coach Shell — Consola de Rendimiento Iniciada.",
     "Escriba 'help' para listar los comandos disponibles."
   ]);
   const [terminalInput, setTerminalInput] = useState("");
-  
-  // Custom Routine & Loads per User
-  const [workoutLoads, setWorkoutLoads] = useState<Record<string, number>>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("gymos_loads");
-      if (saved) {
-        try { return JSON.parse(saved); } catch (e) { }
-      }
-    }
-    return {
-      "push-1": 77.5,
-      "pull-1": 85.0,
-      "legs-1": 112.5
-    };
-  });
-
-  // Sync to localStorage & Firebase Firestore
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("gymos_user", JSON.stringify(currentUser));
-      syncUserToFirestore(currentUser);
-    }
-  }, [currentUser]);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("gymos_checkins", JSON.stringify(checkins));
-    }
-  }, [checkins]);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("gymos_loads", JSON.stringify(workoutLoads));
-    }
-  }, [workoutLoads]);
-
-  // Modal Recipe State
-  const [selectedRecipePdf, setSelectedRecipePdf] = useState<any | null>(null);
   const [leadModalOpen, setLeadModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -190,12 +149,25 @@ export default function GymOSMainApp() {
     return () => clearInterval(timer);
   }, []);
 
+  // Sync to localStorage & Firebase Firestore
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("gymos_user", JSON.stringify(currentUser));
+      syncUserToFirestore(currentUser);
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("gymos_checkins", JSON.stringify(checkins));
+    }
+  }, [checkins]);
+
   const triggerToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
   };
 
-  // --- ACCESO PLENO TRAS PAGO PAYPAL ---
   const handlePaymentSuccess = (planName: string) => {
     setCurrentUser((prev) => ({
       ...prev,
@@ -243,7 +215,6 @@ export default function GymOSMainApp() {
     }
   };
 
-  // --- REGISTRAR CHECKIN UBICADO POR USUARIO ---
   const handleAddCheckin = (e: React.FormEvent) => {
     e.preventDefault();
     const nextWeek = checkins.length + 1;
@@ -269,7 +240,6 @@ export default function GymOSMainApp() {
     triggerToast(`Check-in Semana ${nextWeek} guardado y sincronizado en la nube`);
   };
 
-  // --- COMANDOS TERMINAL COACH SHELL ---
   const handleTerminalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!terminalInput.trim()) return;
@@ -339,10 +309,10 @@ export default function GymOSMainApp() {
           </div>
 
           {/* Menú de Navegación Pestañas */}
-          <nav className="hidden md:flex items-center gap-2">
+          <nav className="hidden lg:flex items-center gap-1.5">
             <button
               onClick={() => setActiveTab("dashboard")}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
                 activeTab === "dashboard" ? "bg-white/15 text-[#D4AF37] border border-[#D4AF37]/40" : "text-gray-300 hover:text-white"
               }`}
             >
@@ -351,34 +321,43 @@ export default function GymOSMainApp() {
 
             <button
               onClick={() => setActiveTab("workout")}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
                 activeTab === "workout" ? "bg-white/15 text-[#D4AF37] border border-[#D4AF37]/40" : "text-gray-300 hover:text-white"
               }`}
             >
-              <Dumbbell className="w-3.5 h-3.5" /> Rutina & Biomecánica
+              <Dumbbell className="w-3.5 h-3.5" /> Rutinas & Biomecánica
             </button>
 
             <button
               onClick={() => setActiveTab("nutrition")}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
                 activeTab === "nutrition" ? "bg-white/15 text-[#D4AF37] border border-[#D4AF37]/40" : "text-gray-300 hover:text-white"
               }`}
             >
-              <Utensils className="w-3.5 h-3.5" /> Dietas TDEE & Recetas PDF
+              <Utensils className="w-3.5 h-3.5" /> Dietas & Recetas PDF
+            </button>
+
+            <button
+              onClick={() => setActiveTab("domain")}
+              className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
+                activeTab === "domain" ? "bg-white/15 text-[#D4AF37] border border-[#D4AF37]/40" : "text-gray-300 hover:text-white"
+              }`}
+            >
+              <Globe className="w-3.5 h-3.5 text-blue-400" /> Dominio & SSL
             </button>
 
             <button
               onClick={() => setActiveTab("coach-shell")}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
                 activeTab === "coach-shell" ? "bg-white/15 text-[#D4AF37] border border-[#D4AF37]/40" : "text-gray-300 hover:text-white"
               }`}
             >
-              <Terminal className="w-3.5 h-3.5 text-cyan-400" /> Terminal Coach Shell
+              <Terminal className="w-3.5 h-3.5 text-cyan-400" /> Coach Shell
             </button>
 
             <button
               onClick={() => setActiveTab("checkout")}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
                 activeTab === "checkout" ? "bg-emerald-600 text-white shadow-lg" : "bg-emerald-950/60 text-emerald-400 border border-emerald-800/40"
               }`}
             >
@@ -386,7 +365,7 @@ export default function GymOSMainApp() {
             </button>
           </nav>
 
-          {/* Acciones de Encabezado */}
+          {/* Selector de Rol & Captación Lead */}
           <div className="flex items-center gap-3">
             <select
               value={currentUser.role}
@@ -408,9 +387,8 @@ export default function GymOSMainApp() {
         </div>
       </header>
 
-      {/* BANNER PRINCIPAL (FOTO REAL DE MANCUERNAS CON MOVIMIENTO KEN BURNS DE ZOOM LENTO) */}
+      {/* BANNER PRINCIPAL (FOTO REAL CON MOVIMIENTO DE ZOOM KEN BURNS) */}
       <section className="relative h-[440px] w-full flex items-center justify-center overflow-hidden border-b-2 border-[#00f2fe]/40 shadow-2xl bg-black">
-        {/* Foto Real de Gimnasio & Fuerza (Entrenamiento de Alta Precisión) con Animación Continuous Zoom */}
         <Image
           src="/img/hero-banner.jpg"
           alt="GymOS Fuerza & Entrenamiento Real"
@@ -418,7 +396,6 @@ export default function GymOSMainApp() {
           priority
           className="object-cover object-center opacity-55 filter contrast-125 brightness-95 hero-motion-img"
         />
-        {/* Watermark Logo Irahi Reynosa */}
         <Image
           src="/img/irahi-reynosa-logo.png"
           alt="Watermark Logo"
@@ -426,24 +403,20 @@ export default function GymOSMainApp() {
           height={400}
           className="absolute inset-0 w-full h-full object-contain opacity-15 pointer-events-none p-12"
         />
-        {/* Overlay Degradado Radial y Viñeta Cinemática */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-[#08090B] z-10 pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(8,9,11,0.8)_70%)] z-10 pointer-events-none" />
 
-        {/* Contenido Central del Banner */}
         <div className="relative z-20 max-w-4xl mx-auto text-center px-4 space-y-4">
           <div className="inline-flex items-center gap-2 bg-cyan-950/80 text-[#00f2fe] border border-[#00f2fe]/40 px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase shadow-[0_0_20px_rgba(0,242,254,0.2)]">
             <Sparkles className="w-4 h-4 text-[#00f2fe]" /> INGENIERÍA DE RENDIMIENTO HUMANO • IRAHI REYNOSA
           </div>
 
-          {/* Carrusel de Filosofía */}
           <div className="min-h-[90px] flex items-center justify-center">
             <blockquote className="text-2xl md:text-4xl font-serif text-white font-normal leading-tight max-w-3xl transition-all duration-700">
               {quotes[quoteIndex]}
             </blockquote>
           </div>
 
-          {/* Paginador Neón */}
           <div className="flex justify-center gap-2 pt-2">
             {quotes.map((_, i) => (
               <span
@@ -460,64 +433,27 @@ export default function GymOSMainApp() {
 
       {/* CONTENIDO PRINCIPAL SEGÚN LA PESTAÑA ACTIVA */}
       <main className="max-w-7xl mx-auto px-6 py-10">
-        {/* PESTAÑA 1: DASHBOARD CRM & SEGUIMIENTO PERSONALIZADO UBICADO POR USUARIO */}
+        {/* PESTAÑA 1: DASHBOARD CRM COMPLETO & REGISTRO DE CHECK-INS */}
         {activeTab === "dashboard" && (
           <div className="space-y-8 animate-in fade-in duration-300">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-gray-800 pb-6">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-widest text-[#D4AF37] bg-amber-950/60 px-3 py-1 rounded-full border border-amber-900/40">
-                  USUARIO ACTIVO: {currentUser.name.toUpperCase()}
-                </span>
-                <h2 className="text-3xl font-serif text-white mt-2">Panel de Control & Confrontación de Logros</h2>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span className="bg-emerald-950 text-emerald-400 border border-emerald-800 px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400" /> Estatus: {currentUser.paymentStatus}
-                </span>
-              </div>
-            </div>
-
-            {/* Grid de Métricas */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="bg-gray-900/90 border border-gray-800 p-6 rounded-2xl">
-                <span className="text-[10px] text-gray-400 uppercase font-bold">Peso Actual / Meta</span>
-                <p className="text-3xl font-extrabold text-white mt-2">{currentUser.weight} <span className="text-xs font-normal text-gray-400">kg</span></p>
-                <span className="text-xs text-amber-400 font-semibold mt-1 block">Meta: {currentUser.targetWeight} kg</span>
-              </div>
-
-              <div className="bg-gray-900/90 border border-gray-800 p-6 rounded-2xl">
-                <span className="text-[10px] text-gray-400 uppercase font-bold">Calorías Objetivo</span>
-                <p className="text-3xl font-extrabold text-amber-400 mt-2">{currentUser.targetCalories} <span className="text-xs font-normal text-gray-400">kcal</span></p>
-                <span className="text-xs text-gray-400 font-semibold mt-1 block">TDEE Mantenimiento: {currentUser.tdee}</span>
-              </div>
-
-              <div className="bg-gray-900/90 border border-gray-800 p-6 rounded-2xl">
-                <span className="text-[10px] text-gray-400 uppercase font-bold">Adherencia Media</span>
-                <p className="text-3xl font-extrabold text-emerald-400 mt-2">94.5%</p>
-                <span className="text-xs text-emerald-400 font-semibold mt-1 block">↑ 4 Semanas Verificadas</span>
-              </div>
-
-              <div className="bg-gray-900/90 border border-gray-800 p-6 rounded-2xl">
-                <span className="text-[10px] text-gray-400 uppercase font-bold">Carga Press de Banca</span>
-                <p className="text-3xl font-extrabold text-red-500 mt-2">77.5 <span className="text-xs font-normal text-gray-400">kg</span></p>
-                <span className="text-xs text-red-400 font-semibold mt-1 block">+7.5 kg Sobrecarga Progresiva</span>
-              </div>
-            </div>
+            <CrmDashboard />
 
             {/* TABLA DE CHECK-INS PERSONALIZADOS POR USUARIO */}
-            <div className="bg-gray-900/90 border border-gray-800 p-6 rounded-2xl">
+            <div className="bg-gray-900/90 border border-gray-800 p-6 rounded-3xl shadow-xl">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-xl font-serif text-white">Historial de Seguimiento Personalizado</h3>
-                  <p className="text-xs text-gray-400 mt-1">Registros vinculados a la cuenta de {currentUser.email}</p>
+                  <span className="text-xs font-bold uppercase tracking-widest text-[#D4AF37] bg-amber-950/60 px-3 py-1 rounded-full border border-amber-900/40">
+                    USUARIO EN SESIÓN: {currentUser.name.toUpperCase()}
+                  </span>
+                  <h3 className="text-2xl font-serif text-white mt-2">Historial de Seguimiento Personalizado</h3>
+                  <p className="text-xs text-gray-400 mt-1">Registros vinculados a la cuenta {currentUser.email}</p>
                 </div>
 
                 <button
                   onClick={handleAddCheckin}
-                  className="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition-all shadow-md flex items-center gap-1.5"
+                  className="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-all shadow-md flex items-center gap-1.5"
                 >
-                  <Activity className="w-3.5 h-3.5" /> Agregar Check-in Semanal
+                  <Activity className="w-4 h-4" /> Agregar Check-in Semanal
                 </button>
               </div>
 
@@ -556,207 +492,41 @@ export default function GymOSMainApp() {
                 </table>
               </div>
             </div>
+
+            <LeadCta />
           </div>
         )}
 
-        {/* PESTAÑA 2: MOTOR DE NUTRICIÓN TDEE & DIETAS PERSONALIZADAS POR USUARIO */}
-        {activeTab === "nutrition" && (
-          hasFullAccess ? (
-            <div className="space-y-8 animate-in fade-in duration-300">
-              <div className="bg-gray-900/90 border border-gray-800 p-8 rounded-3xl">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-gray-800 pb-6">
-                  <div>
-                    <span className="text-xs font-bold uppercase tracking-widest text-gold bg-amber-950/60 px-3 py-1 rounded-full border border-amber-900/40">
-                      PRESCRIPCIÓN NUTRICIONAL VINCULADA A: {currentUser.name.toUpperCase()}
-                    </span>
-                    <h2 className="text-3xl font-serif text-white mt-2">Motor Nutricional TDEE & Gramajes Exactos</h2>
-                  </div>
-                </div>
-
-                {/* Controles de Selección de Dieta */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                  <div>
-                    <label className="block text-xs font-bold uppercase text-gray-300 mb-2">
-                      Tipo de Dieta Preferida:
-                    </label>
-                    <select
-                      value={currentUser.dietType}
-                      onChange={(e) => setCurrentUser({ ...currentUser, dietType: e.target.value as any })}
-                      className="w-full bg-gray-950 border border-gray-800 text-white rounded-xl px-4 py-3 text-xs outline-none focus:border-amber-500"
-                    >
-                      <option value="omnivore">Omnívora Élite</option>
-                      <option value="pescatarian">Pescetariana & Omegas</option>
-                      <option value="vegetarian">Vegetariana Anabólica</option>
-                      <option value="lowcarb">Low Carb / Definición Extrema</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold uppercase text-gray-300 mb-2">
-                      Objetivo Biológico:
-                    </label>
-                    <select
-                      value={currentUser.goal}
-                      onChange={(e) => setCurrentUser({ ...currentUser, goal: e.target.value as any })}
-                      className="w-full bg-gray-950 border border-gray-800 text-white rounded-xl px-4 py-3 text-xs outline-none focus:border-amber-500"
-                    >
-                      <option value="fatloss">Déficit Calórico (Pérdida de Grasa)</option>
-                      <option value="muscle">Superávit Limpio (Hipertrofia Muscular)</option>
-                      <option value="strength">Recomposición Corporal (Fuerza)</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold uppercase text-gray-300 mb-2">
-                      Calorías Ajustadas:
-                    </label>
-                    <input
-                      type="number"
-                      value={currentUser.targetCalories}
-                      onChange={(e) => setCurrentUser({ ...currentUser, targetCalories: Number(e.target.value) })}
-                      className="w-full bg-gray-950 border border-gray-800 text-amber-400 font-extrabold rounded-xl px-4 py-3 text-xs outline-none focus:border-amber-500"
-                    />
-                  </div>
-                </div>
-
-                {/* Muestra de Comidas Diarias con Gramajes Exactos */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-serif text-white mb-2">Menú Diario Asignado por Gramos:</h3>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-1">
-                      <span className="text-[10px] font-bold uppercase text-amber-400">1. Desayuno Anabólico</span>
-                      <p className="text-xs text-white font-semibold">120g Huevos Enteros Orgánicos + 60g Avena Integral + 80g Frutos Rojos</p>
-                      <span className="text-[10px] text-gray-400 block">Proteína: 38g | Carbos: 45g | Grasas: 14g</span>
-                    </div>
-
-                    <div className="bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-1">
-                      <span className="text-[10px] font-bold uppercase text-amber-400">2. Colación Pre-Workout</span>
-                      <p className="text-xs text-white font-semibold">200g Yogur Griego 0% + 20g Almendras Tostadas en Lascas</p>
-                      <span className="text-[10px] text-gray-400 block">Proteína: 24g | Carbos: 12g | Grasas: 10g</span>
-                    </div>
-
-                    <div className="bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-1">
-                      <span className="text-[10px] font-bold uppercase text-amber-400">3. Comida Principal de Rendimiento</span>
-                      <p className="text-xs text-white font-semibold">180g Pechuga de Pollo + 180g Arroz Jasmine al Vapor + 10g Aceite de Oliva</p>
-                      <span className="text-[10px] text-gray-400 block">Proteína: 56g | Carbos: 50g | Grasas: 12g</span>
-                    </div>
-
-                    <div className="bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-1">
-                      <span className="text-[10px] font-bold uppercase text-amber-400">4. Cena de Reparación Tisular</span>
-                      <p className="text-xs text-white font-semibold">170g Filete de Salmón Noruego + 180g Camote Horneado + Ensalada Verde</p>
-                      <span className="text-[10px] text-gray-400 block">Proteína: 45g | Carbos: 38g | Grasas: 22g</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <PaywallNotice onGoToCheckout={() => setActiveTab("checkout")} />
-          )
-        )}
-
-        {/* PESTAÑA 3: RUTINA BIOMECÁNICA UBICADA POR USUARIO */}
+        {/* PESTAÑA 2: SECCIÓN COMPLETA DE RUTINAS & BIOMECÁNICA */}
         {activeTab === "workout" && (
           hasFullAccess ? (
-            <div className="space-y-8 animate-in fade-in duration-300">
-              <div className="bg-gray-900/90 border border-gray-800 p-8 rounded-3xl">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-gray-800 pb-6">
-                  <div>
-                    <span className="text-xs font-bold uppercase tracking-widest text-red-500 bg-red-950/60 px-3 py-1 rounded-full border border-red-900/40">
-                      PRESCRIPCIÓN BIOMECÁNICA: {currentUser.name.toUpperCase()}
-                    </span>
-                    <h2 className="text-3xl font-serif text-white mt-2">Generador de Rutinas & Cargas Progresivas</h2>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-gray-950 p-6 rounded-2xl border border-gray-800 flex flex-col justify-between">
-                    <div>
-                      <span className="text-[10px] font-bold uppercase text-red-400 bg-red-950/50 px-2.5 py-1 rounded-md">PECTORAL MAYOR</span>
-                      <h3 className="text-lg font-bold text-white mt-2">Press de Banca Inclinado (30°)</h3>
-                      <p className="text-xs text-gray-300 mt-1">4 Series × 8-10 Reps (RIR 1)</p>
-                      <p className="text-[11px] text-gray-400 mt-3 bg-gray-900 p-3 rounded-xl border border-gray-800">
-                        <strong>Tip Biomecánico:</strong> Mantén depresión escapular fija y codos a 45° del torso.
-                      </p>
-                    </div>
-                    <div className="mt-4 pt-3 border-t border-gray-900 flex gap-2">
-                      <input
-                        type="number"
-                        placeholder="Carga (kg)"
-                        defaultValue={workoutLoads["push-1"]}
-                        onChange={(e) => setWorkoutLoads({ ...workoutLoads, "push-1": Number(e.target.value) })}
-                        className="w-full bg-gray-900 text-white px-3 py-2 rounded-lg border border-gray-800 text-xs outline-none"
-                      />
-                      <button
-                        onClick={() => triggerToast(`Carga guardada: Press Inclinado ${workoutLoads["push-1"]} kg`)}
-                        className="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-xs"
-                      >
-                        Guardar
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-950 p-6 rounded-2xl border border-gray-800 flex flex-col justify-between">
-                    <div>
-                      <span className="text-[10px] font-bold uppercase text-red-400 bg-red-950/50 px-2.5 py-1 rounded-md">DORSAL ANCHO</span>
-                      <h3 className="text-lg font-bold text-white mt-2">Jalón al Pecho Agarre Neutro</h3>
-                      <p className="text-xs text-gray-300 mt-1">4 Series × 10-12 Reps (RIR 2)</p>
-                      <p className="text-[11px] text-gray-400 mt-3 bg-gray-900 p-3 rounded-xl border border-gray-800">
-                        <strong>Tip Biomecánico:</strong> Dirige los codos hacia las crestas ilíacas bajando escápulas primero.
-                      </p>
-                    </div>
-                    <div className="mt-4 pt-3 border-t border-gray-900 flex gap-2">
-                      <input
-                        type="number"
-                        placeholder="Carga (kg)"
-                        defaultValue={workoutLoads["pull-1"]}
-                        onChange={(e) => setWorkoutLoads({ ...workoutLoads, "pull-1": Number(e.target.value) })}
-                        className="w-full bg-gray-900 text-white px-3 py-2 rounded-lg border border-gray-800 text-xs outline-none"
-                      />
-                      <button
-                        onClick={() => triggerToast(`Carga guardada: Jalón ${workoutLoads["pull-1"]} kg`)}
-                        className="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-xs"
-                      >
-                        Guardar
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-950 p-6 rounded-2xl border border-gray-800 flex flex-col justify-between">
-                    <div>
-                      <span className="text-[10px] font-bold uppercase text-red-400 bg-red-950/50 px-2.5 py-1 rounded-md">CUÁDRICEPS & GLÚTEO</span>
-                      <h3 className="text-lg font-bold text-white mt-2">Sentadilla Hack o Guiada</h3>
-                      <p className="text-xs text-gray-300 mt-1">4 Series × 6-8 Reps (RIR 1)</p>
-                      <p className="text-[11px] text-gray-400 mt-3 bg-gray-900 p-3 rounded-xl border border-gray-800">
-                        <strong>Tip Biomecánico:</strong> Máxima flexión de rodilla con dorsiflexión profunda de tobillos.
-                      </p>
-                    </div>
-                    <div className="mt-4 pt-3 border-t border-gray-900 flex gap-2">
-                      <input
-                        type="number"
-                        placeholder="Carga (kg)"
-                        defaultValue={workoutLoads["legs-1"]}
-                        onChange={(e) => setWorkoutLoads({ ...workoutLoads, "legs-1": Number(e.target.value) })}
-                        className="w-full bg-gray-900 text-white px-3 py-2 rounded-lg border border-gray-800 text-xs outline-none"
-                      />
-                      <button
-                        onClick={() => triggerToast(`Carga guardada: Sentadilla ${workoutLoads["legs-1"]} kg`)}
-                        className="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-xs"
-                      >
-                        Guardar
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="animate-in fade-in duration-300">
+              <WorkoutSection />
             </div>
           ) : (
             <PaywallNotice onGoToCheckout={() => setActiveTab("checkout")} />
           )
         )}
 
-        {/* PESTAÑA 4: TERMINAL COACH SHELL CLI */}
+        {/* PESTAÑA 3: SECCIÓN COMPLETA DE DIETAS & RECETAS PDF */}
+        {activeTab === "nutrition" && (
+          hasFullAccess ? (
+            <div className="animate-in fade-in duration-300">
+              <NutritionSection />
+            </div>
+          ) : (
+            <PaywallNotice onGoToCheckout={() => setActiveTab("checkout")} />
+          )
+        )}
+
+        {/* PESTAÑA 4: DOMINIO SSL & INFRAESTRUCTURA CLOUD */}
+        {activeTab === "domain" && (
+          <div className="animate-in fade-in duration-300">
+            <DomainGuide />
+          </div>
+        )}
+
+        {/* PESTAÑA 5: TERMINAL COACH SHELL CLI */}
         {activeTab === "coach-shell" && (
           hasFullAccess ? (
             <div className="space-y-6 animate-in fade-in duration-300">
@@ -768,7 +538,6 @@ export default function GymOSMainApp() {
                   <span className="text-[10px] text-gray-500 uppercase">USUARIO: {currentUser.name}</span>
                 </div>
 
-                {/* Logs de Consola */}
                 <div className="h-80 overflow-y-auto space-y-2 text-xs bg-black/60 p-4 rounded-xl border border-gray-900 mb-4 font-mono">
                   {terminalLogs.map((log, i) => (
                     <p key={i} className={log.startsWith("GymOS-Coach>") ? "text-amber-400 font-bold" : log.includes("ÉXITO") ? "text-emerald-400 font-bold" : "text-cyan-300"}>
@@ -777,7 +546,6 @@ export default function GymOSMainApp() {
                   ))}
                 </div>
 
-                {/* Formulario de Entrada */}
                 <form onSubmit={handleTerminalSubmit} className="flex gap-2">
                   <span className="text-amber-400 font-bold text-xs py-2.5">GymOS-Coach&gt;</span>
                   <input
@@ -798,7 +566,7 @@ export default function GymOSMainApp() {
           )
         )}
 
-        {/* PESTAÑA 5: MEMBRESÍAS ÉLITE & DESBLOQUEO TRAS PAGO PAYPAL */}
+        {/* PESTAÑA 6: MEMBRESÍAS ÉLITE & DESBLOQUEO TRAS PAGO PAYPAL */}
         {activeTab === "checkout" && (
           <div className="space-y-8 animate-in fade-in duration-300">
             <div className="bg-gray-900/90 border border-gray-800 p-8 rounded-3xl text-center max-w-3xl mx-auto space-y-6">
