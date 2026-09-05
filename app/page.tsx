@@ -11,6 +11,7 @@ import {
 export interface UserState {
   name: string;
   email: string;
+  role: "admin" | "gerente" | "client";
   age: number;
   gender: "male" | "female";
   weight: number;
@@ -45,6 +46,31 @@ export interface ExerciseLoad {
   date: string;
 }
 
+function PaywallNotice({ onGoToCheckout }: { onGoToCheckout: () => void }) {
+  return (
+    <div className="bg-gray-900/90 border border-amber-500/40 p-8 rounded-3xl text-center max-w-2xl mx-auto space-y-5 animate-in fade-in">
+      <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/30 rounded-2xl flex items-center justify-center mx-auto text-[#D4AF37]">
+        <Lock className="w-8 h-8" />
+      </div>
+      <span className="inline-block text-xs font-bold uppercase tracking-widest text-[#D4AF37] bg-amber-950/60 px-3.5 py-1 rounded-full border border-amber-900/40">
+        CONTENIDO EXCLUSIVO ÉLITE VIP
+      </span>
+      <h3 className="text-2xl font-serif text-white font-bold">
+        Acceso Restringido a Clientes Públicos
+      </h3>
+      <p className="text-gray-300 text-xs leading-relaxed max-w-lg mx-auto">
+        Esta sección (dietas por gramos, rutinas biomecánicas y consola de seguimiento) requiere una suscripción activa. El Propietario y el Gerente cuentan con <strong>Acceso Total Gratuito</strong> permanente.
+      </p>
+      <button
+        onClick={onGoToCheckout}
+        className="bg-[#D4AF37] hover:bg-amber-500 text-gray-950 font-black px-6 py-3 rounded-xl text-xs uppercase shadow-xl transition-all inline-flex items-center gap-2"
+      >
+        <Crown className="w-4 h-4" /> Desbloquear Acceso Pleno Élite ($89 USD)
+      </button>
+    </div>
+  );
+}
+
 export default function GymOSMainApp() {
   // --- ESTADO UBICADO POR USUARIO ---
   const [activeTab, setActiveTab] = useState<
@@ -55,26 +81,35 @@ export default function GymOSMainApp() {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("gymos_user");
       if (saved) {
-        try { return JSON.parse(saved); } catch (e) { }
+        try {
+          const parsed = JSON.parse(saved);
+          if (!parsed.role) parsed.role = "admin";
+          return parsed;
+        } catch (e) { }
       }
     }
     return {
-      name: "Carlos Mendoza",
-      email: "carlos.mendoza@luxury.com",
-      age: 29,
+      name: "Irahi Reynosa (Propietario)",
+      email: "irahi.reynosa@gymos.com",
+      role: "admin",
+      age: 30,
       gender: "male",
-      weight: 76.4,
-      targetWeight: 74.0,
-      height: 178,
-      activity: 1.55,
-      goal: "fatloss",
+      weight: 78.0,
+      targetWeight: 75.0,
+      height: 180,
+      activity: 1.725,
+      goal: "muscle",
       dietType: "omnivore",
-      tdee: 2650,
-      targetCalories: 2120,
-      membership: "Plan Mensual Élite",
+      tdee: 2900,
+      targetCalories: 2450,
+      membership: "Acceso Maestro Propietario",
       paymentStatus: "Activo Élite VIP"
     };
   });
+
+  // Evaluación de Acceso Maestro (Tú y el Gerente no pagan jamás)
+  const isMasterUser = currentUser.role === "admin" || currentUser.role === "gerente";
+  const hasFullAccess = isMasterUser || currentUser.paymentStatus === "Activo Élite VIP";
 
   const [checkins, setCheckins] = useState<CheckinItem[]>(() => {
     if (typeof window !== "undefined") {
@@ -166,6 +201,44 @@ export default function GymOSMainApp() {
       paymentStatus: "Activo Élite VIP"
     }));
     triggerToast(`¡Pago confirmado! Acceso Pleno Élite activado para ${currentUser.name}`);
+  };
+
+  const handleActivateMaster = () => {
+    setCurrentUser((prev) => ({
+      ...prev,
+      name: "Irahi Reynosa (Propietario)",
+      email: "irahi.reynosa@gymos.com",
+      role: "admin",
+      membership: "Acceso Maestro Propietario",
+      paymentStatus: "Activo Élite VIP"
+    }));
+    triggerToast("Modo Propietario Activado: Acceso Gratis Restaurado");
+  };
+
+  const handleRoleChange = (newRole: "admin" | "gerente" | "client") => {
+    if (newRole === "admin") {
+      handleActivateMaster();
+    } else if (newRole === "gerente") {
+      setCurrentUser((prev) => ({
+        ...prev,
+        name: "Gerente General (GymOS)",
+        email: "gerencia@gymos.com",
+        role: "gerente",
+        membership: "Acceso Maestro Gerencia",
+        paymentStatus: "Activo Élite VIP"
+      }));
+      triggerToast("Modo Gerente Activo: Acceso Total Gratuito Desbloqueado");
+    } else {
+      setCurrentUser((prev) => ({
+        ...prev,
+        name: "Cliente Demostración",
+        email: "cliente.nuevo@ejemplo.com",
+        role: "client",
+        membership: "Sin Membresía",
+        paymentStatus: "Pendiente de Pago"
+      }));
+      triggerToast("Modo Cliente Publico Activo: Requiere Pago para Acceder");
+    }
   };
 
   // --- REGISTRAR CHECKIN UBICADO POR USUARIO ---
@@ -312,6 +385,16 @@ export default function GymOSMainApp() {
 
           {/* Acciones de Encabezado */}
           <div className="flex items-center gap-3">
+            <select
+              value={currentUser.role}
+              onChange={(e) => handleRoleChange(e.target.value as "admin" | "gerente" | "client")}
+              className="bg-gray-950 border border-[#D4AF37]/50 text-[#D4AF37] font-bold text-xs rounded-xl px-3 py-2 outline-none focus:ring-1 focus:ring-[#D4AF37]"
+            >
+              <option value="admin">👑 Propietario (Irahi)</option>
+              <option value="gerente">💼 Gerente General</option>
+              <option value="client">👤 Cliente Público</option>
+            </select>
+
             <button
               onClick={() => setLeadModalOpen(true)}
               className="bg-[#D4AF37] hover:bg-amber-500 text-gray-950 font-extrabold px-4 py-2 rounded-xl text-xs shadow-lg transition-all flex items-center gap-1.5"
@@ -475,229 +558,241 @@ export default function GymOSMainApp() {
 
         {/* PESTAÑA 2: MOTOR DE NUTRICIÓN TDEE & DIETAS PERSONALIZADAS POR USUARIO */}
         {activeTab === "nutrition" && (
-          <div className="space-y-8 animate-in fade-in duration-300">
-            <div className="bg-gray-900/90 border border-gray-800 p-8 rounded-3xl">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-gray-800 pb-6">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-widest text-gold bg-amber-950/60 px-3 py-1 rounded-full border border-amber-900/40">
-                    PRESCRIPCIÓN NUTRICIONAL VINCULADA A: {currentUser.name.toUpperCase()}
-                  </span>
-                  <h2 className="text-3xl font-serif text-white mt-2">Motor Nutricional TDEE & Gramajes Exactos</h2>
-                </div>
-              </div>
-
-              {/* Controles de Selección de Dieta */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div>
-                  <label className="block text-xs font-bold uppercase text-gray-300 mb-2">
-                    Tipo de Dieta Preferida:
-                  </label>
-                  <select
-                    value={currentUser.dietType}
-                    onChange={(e) => setCurrentUser({ ...currentUser, dietType: e.target.value as any })}
-                    className="w-full bg-gray-950 border border-gray-800 text-white rounded-xl px-4 py-3 text-xs outline-none focus:border-amber-500"
-                  >
-                    <option value="omnivore">Omnívora Élite</option>
-                    <option value="pescatarian">Pescetariana & Omegas</option>
-                    <option value="vegetarian">Vegetariana Anabólica</option>
-                    <option value="lowcarb">Low Carb / Definición Extrema</option>
-                  </select>
+          hasFullAccess ? (
+            <div className="space-y-8 animate-in fade-in duration-300">
+              <div className="bg-gray-900/90 border border-gray-800 p-8 rounded-3xl">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-gray-800 pb-6">
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-widest text-gold bg-amber-950/60 px-3 py-1 rounded-full border border-amber-900/40">
+                      PRESCRIPCIÓN NUTRICIONAL VINCULADA A: {currentUser.name.toUpperCase()}
+                    </span>
+                    <h2 className="text-3xl font-serif text-white mt-2">Motor Nutricional TDEE & Gramajes Exactos</h2>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold uppercase text-gray-300 mb-2">
-                    Objetivo Biológico:
-                  </label>
-                  <select
-                    value={currentUser.goal}
-                    onChange={(e) => setCurrentUser({ ...currentUser, goal: e.target.value as any })}
-                    className="w-full bg-gray-950 border border-gray-800 text-white rounded-xl px-4 py-3 text-xs outline-none focus:border-amber-500"
-                  >
-                    <option value="fatloss">Déficit Calórico (Pérdida de Grasa)</option>
-                    <option value="muscle">Superávit Limpio (Hipertrofia Muscular)</option>
-                    <option value="strength">Recomposición Corporal (Fuerza)</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold uppercase text-gray-300 mb-2">
-                    Calorías Ajustadas:
-                  </label>
-                  <input
-                    type="number"
-                    value={currentUser.targetCalories}
-                    onChange={(e) => setCurrentUser({ ...currentUser, targetCalories: Number(e.target.value) })}
-                    className="w-full bg-gray-950 border border-gray-800 text-amber-400 font-extrabold rounded-xl px-4 py-3 text-xs outline-none focus:border-amber-500"
-                  />
-                </div>
-              </div>
-
-              {/* Muestra de Comidas Diarias con Gramajes Exactos */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-serif text-white mb-2">Menú Diario Asignado por Gramos:</h3>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-1">
-                    <span className="text-[10px] font-bold uppercase text-amber-400">1. Desayuno Anabólico</span>
-                    <p className="text-xs text-white font-semibold">120g Huevos Enteros Orgánicos + 60g Avena Integral + 80g Frutos Rojos</p>
-                    <span className="text-[10px] text-gray-400 block">Proteína: 38g | Carbos: 45g | Grasas: 14g</span>
+                {/* Controles de Selección de Dieta */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <div>
+                    <label className="block text-xs font-bold uppercase text-gray-300 mb-2">
+                      Tipo de Dieta Preferida:
+                    </label>
+                    <select
+                      value={currentUser.dietType}
+                      onChange={(e) => setCurrentUser({ ...currentUser, dietType: e.target.value as any })}
+                      className="w-full bg-gray-950 border border-gray-800 text-white rounded-xl px-4 py-3 text-xs outline-none focus:border-amber-500"
+                    >
+                      <option value="omnivore">Omnívora Élite</option>
+                      <option value="pescatarian">Pescetariana & Omegas</option>
+                      <option value="vegetarian">Vegetariana Anabólica</option>
+                      <option value="lowcarb">Low Carb / Definición Extrema</option>
+                    </select>
                   </div>
 
-                  <div className="bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-1">
-                    <span className="text-[10px] font-bold uppercase text-amber-400">2. Colación Pre-Workout</span>
-                    <p className="text-xs text-white font-semibold">200g Yogur Griego 0% + 20g Almendras Tostadas en Lascas</p>
-                    <span className="text-[10px] text-gray-400 block">Proteína: 24g | Carbos: 12g | Grasas: 10g</span>
+                  <div>
+                    <label className="block text-xs font-bold uppercase text-gray-300 mb-2">
+                      Objetivo Biológico:
+                    </label>
+                    <select
+                      value={currentUser.goal}
+                      onChange={(e) => setCurrentUser({ ...currentUser, goal: e.target.value as any })}
+                      className="w-full bg-gray-950 border border-gray-800 text-white rounded-xl px-4 py-3 text-xs outline-none focus:border-amber-500"
+                    >
+                      <option value="fatloss">Déficit Calórico (Pérdida de Grasa)</option>
+                      <option value="muscle">Superávit Limpio (Hipertrofia Muscular)</option>
+                      <option value="strength">Recomposición Corporal (Fuerza)</option>
+                    </select>
                   </div>
 
-                  <div className="bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-1">
-                    <span className="text-[10px] font-bold uppercase text-amber-400">3. Comida Principal de Rendimiento</span>
-                    <p className="text-xs text-white font-semibold">180g Pechuga de Pollo + 180g Arroz Jasmine al Vapor + 10g Aceite de Oliva</p>
-                    <span className="text-[10px] text-gray-400 block">Proteína: 56g | Carbos: 50g | Grasas: 12g</span>
+                  <div>
+                    <label className="block text-xs font-bold uppercase text-gray-300 mb-2">
+                      Calorías Ajustadas:
+                    </label>
+                    <input
+                      type="number"
+                      value={currentUser.targetCalories}
+                      onChange={(e) => setCurrentUser({ ...currentUser, targetCalories: Number(e.target.value) })}
+                      className="w-full bg-gray-950 border border-gray-800 text-amber-400 font-extrabold rounded-xl px-4 py-3 text-xs outline-none focus:border-amber-500"
+                    />
                   </div>
+                </div>
 
-                  <div className="bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-1">
-                    <span className="text-[10px] font-bold uppercase text-amber-400">4. Cena de Reparación Tisular</span>
-                    <p className="text-xs text-white font-semibold">170g Filete de Salmón Noruego + 180g Camote Horneado + Ensalada Verde</p>
-                    <span className="text-[10px] text-gray-400 block">Proteína: 45g | Carbos: 38g | Grasas: 22g</span>
+                {/* Muestra de Comidas Diarias con Gramajes Exactos */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-serif text-white mb-2">Menú Diario Asignado por Gramos:</h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-1">
+                      <span className="text-[10px] font-bold uppercase text-amber-400">1. Desayuno Anabólico</span>
+                      <p className="text-xs text-white font-semibold">120g Huevos Enteros Orgánicos + 60g Avena Integral + 80g Frutos Rojos</p>
+                      <span className="text-[10px] text-gray-400 block">Proteína: 38g | Carbos: 45g | Grasas: 14g</span>
+                    </div>
+
+                    <div className="bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-1">
+                      <span className="text-[10px] font-bold uppercase text-amber-400">2. Colación Pre-Workout</span>
+                      <p className="text-xs text-white font-semibold">200g Yogur Griego 0% + 20g Almendras Tostadas en Lascas</p>
+                      <span className="text-[10px] text-gray-400 block">Proteína: 24g | Carbos: 12g | Grasas: 10g</span>
+                    </div>
+
+                    <div className="bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-1">
+                      <span className="text-[10px] font-bold uppercase text-amber-400">3. Comida Principal de Rendimiento</span>
+                      <p className="text-xs text-white font-semibold">180g Pechuga de Pollo + 180g Arroz Jasmine al Vapor + 10g Aceite de Oliva</p>
+                      <span className="text-[10px] text-gray-400 block">Proteína: 56g | Carbos: 50g | Grasas: 12g</span>
+                    </div>
+
+                    <div className="bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-1">
+                      <span className="text-[10px] font-bold uppercase text-amber-400">4. Cena de Reparación Tisular</span>
+                      <p className="text-xs text-white font-semibold">170g Filete de Salmón Noruego + 180g Camote Horneado + Ensalada Verde</p>
+                      <span className="text-[10px] text-gray-400 block">Proteína: 45g | Carbos: 38g | Grasas: 22g</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <PaywallNotice onGoToCheckout={() => setActiveTab("checkout")} />
+          )
         )}
 
         {/* PESTAÑA 3: RUTINA BIOMECÁNICA UBICADA POR USUARIO */}
         {activeTab === "workout" && (
-          <div className="space-y-8 animate-in fade-in duration-300">
-            <div className="bg-gray-900/90 border border-gray-800 p-8 rounded-3xl">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-gray-800 pb-6">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-widest text-red-500 bg-red-950/60 px-3 py-1 rounded-full border border-red-900/40">
-                    PRESCRIPCIÓN BIOMECÁNICA: {currentUser.name.toUpperCase()}
-                  </span>
-                  <h2 className="text-3xl font-serif text-white mt-2">Generador de Rutinas & Cargas Progresivas</h2>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gray-950 p-6 rounded-2xl border border-gray-800 flex flex-col justify-between">
+          hasFullAccess ? (
+            <div className="space-y-8 animate-in fade-in duration-300">
+              <div className="bg-gray-900/90 border border-gray-800 p-8 rounded-3xl">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-gray-800 pb-6">
                   <div>
-                    <span className="text-[10px] font-bold uppercase text-red-400 bg-red-950/50 px-2.5 py-1 rounded-md">PECTORAL MAYOR</span>
-                    <h3 className="text-lg font-bold text-white mt-2">Press de Banca Inclinado (30°)</h3>
-                    <p className="text-xs text-gray-300 mt-1">4 Series × 8-10 Reps (RIR 1)</p>
-                    <p className="text-[11px] text-gray-400 mt-3 bg-gray-900 p-3 rounded-xl border border-gray-800">
-                      <strong>Tip Biomecánico:</strong> Mantén depresión escapular fija y codos a 45° del torso.
-                    </p>
-                  </div>
-                  <div className="mt-4 pt-3 border-t border-gray-900 flex gap-2">
-                    <input
-                      type="number"
-                      placeholder="Carga (kg)"
-                      defaultValue={workoutLoads["push-1"]}
-                      onChange={(e) => setWorkoutLoads({ ...workoutLoads, "push-1": Number(e.target.value) })}
-                      className="w-full bg-gray-900 text-white px-3 py-2 rounded-lg border border-gray-800 text-xs outline-none"
-                    />
-                    <button
-                      onClick={() => triggerToast(`Carga guardada: Press Inclinado ${workoutLoads["push-1"]} kg`)}
-                      className="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-xs"
-                    >
-                      Guardar
-                    </button>
+                    <span className="text-xs font-bold uppercase tracking-widest text-red-500 bg-red-950/60 px-3 py-1 rounded-full border border-red-900/40">
+                      PRESCRIPCIÓN BIOMECÁNICA: {currentUser.name.toUpperCase()}
+                    </span>
+                    <h2 className="text-3xl font-serif text-white mt-2">Generador de Rutinas & Cargas Progresivas</h2>
                   </div>
                 </div>
 
-                <div className="bg-gray-950 p-6 rounded-2xl border border-gray-800 flex flex-col justify-between">
-                  <div>
-                    <span className="text-[10px] font-bold uppercase text-red-400 bg-red-950/50 px-2.5 py-1 rounded-md">DORSAL ANCHO</span>
-                    <h3 className="text-lg font-bold text-white mt-2">Jalón al Pecho Agarre Neutro</h3>
-                    <p className="text-xs text-gray-300 mt-1">4 Series × 10-12 Reps (RIR 2)</p>
-                    <p className="text-[11px] text-gray-400 mt-3 bg-gray-900 p-3 rounded-xl border border-gray-800">
-                      <strong>Tip Biomecánico:</strong> Dirige los codos hacia las crestas ilíacas bajando escápulas primero.
-                    </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-gray-950 p-6 rounded-2xl border border-gray-800 flex flex-col justify-between">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase text-red-400 bg-red-950/50 px-2.5 py-1 rounded-md">PECTORAL MAYOR</span>
+                      <h3 className="text-lg font-bold text-white mt-2">Press de Banca Inclinado (30°)</h3>
+                      <p className="text-xs text-gray-300 mt-1">4 Series × 8-10 Reps (RIR 1)</p>
+                      <p className="text-[11px] text-gray-400 mt-3 bg-gray-900 p-3 rounded-xl border border-gray-800">
+                        <strong>Tip Biomecánico:</strong> Mantén depresión escapular fija y codos a 45° del torso.
+                      </p>
+                    </div>
+                    <div className="mt-4 pt-3 border-t border-gray-900 flex gap-2">
+                      <input
+                        type="number"
+                        placeholder="Carga (kg)"
+                        defaultValue={workoutLoads["push-1"]}
+                        onChange={(e) => setWorkoutLoads({ ...workoutLoads, "push-1": Number(e.target.value) })}
+                        className="w-full bg-gray-900 text-white px-3 py-2 rounded-lg border border-gray-800 text-xs outline-none"
+                      />
+                      <button
+                        onClick={() => triggerToast(`Carga guardada: Press Inclinado ${workoutLoads["push-1"]} kg`)}
+                        className="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-xs"
+                      >
+                        Guardar
+                      </button>
+                    </div>
                   </div>
-                  <div className="mt-4 pt-3 border-t border-gray-900 flex gap-2">
-                    <input
-                      type="number"
-                      placeholder="Carga (kg)"
-                      defaultValue={workoutLoads["pull-1"]}
-                      onChange={(e) => setWorkoutLoads({ ...workoutLoads, "pull-1": Number(e.target.value) })}
-                      className="w-full bg-gray-900 text-white px-3 py-2 rounded-lg border border-gray-800 text-xs outline-none"
-                    />
-                    <button
-                      onClick={() => triggerToast(`Carga guardada: Jalón ${workoutLoads["pull-1"]} kg`)}
-                      className="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-xs"
-                    >
-                      Guardar
-                    </button>
-                  </div>
-                </div>
 
-                <div className="bg-gray-950 p-6 rounded-2xl border border-gray-800 flex flex-col justify-between">
-                  <div>
-                    <span className="text-[10px] font-bold uppercase text-red-400 bg-red-950/50 px-2.5 py-1 rounded-md">CUÁDRICEPS & GLÚTEO</span>
-                    <h3 className="text-lg font-bold text-white mt-2">Sentadilla Hack o Guiada</h3>
-                    <p className="text-xs text-gray-300 mt-1">4 Series × 6-8 Reps (RIR 1)</p>
-                    <p className="text-[11px] text-gray-400 mt-3 bg-gray-900 p-3 rounded-xl border border-gray-800">
-                      <strong>Tip Biomecánico:</strong> Máxima flexión de rodilla con dorsiflexión profunda de tobillos.
-                    </p>
+                  <div className="bg-gray-950 p-6 rounded-2xl border border-gray-800 flex flex-col justify-between">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase text-red-400 bg-red-950/50 px-2.5 py-1 rounded-md">DORSAL ANCHO</span>
+                      <h3 className="text-lg font-bold text-white mt-2">Jalón al Pecho Agarre Neutro</h3>
+                      <p className="text-xs text-gray-300 mt-1">4 Series × 10-12 Reps (RIR 2)</p>
+                      <p className="text-[11px] text-gray-400 mt-3 bg-gray-900 p-3 rounded-xl border border-gray-800">
+                        <strong>Tip Biomecánico:</strong> Dirige los codos hacia las crestas ilíacas bajando escápulas primero.
+                      </p>
+                    </div>
+                    <div className="mt-4 pt-3 border-t border-gray-900 flex gap-2">
+                      <input
+                        type="number"
+                        placeholder="Carga (kg)"
+                        defaultValue={workoutLoads["pull-1"]}
+                        onChange={(e) => setWorkoutLoads({ ...workoutLoads, "pull-1": Number(e.target.value) })}
+                        className="w-full bg-gray-900 text-white px-3 py-2 rounded-lg border border-gray-800 text-xs outline-none"
+                      />
+                      <button
+                        onClick={() => triggerToast(`Carga guardada: Jalón ${workoutLoads["pull-1"]} kg`)}
+                        className="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-xs"
+                      >
+                        Guardar
+                      </button>
+                    </div>
                   </div>
-                  <div className="mt-4 pt-3 border-t border-gray-900 flex gap-2">
-                    <input
-                      type="number"
-                      placeholder="Carga (kg)"
-                      defaultValue={workoutLoads["legs-1"]}
-                      onChange={(e) => setWorkoutLoads({ ...workoutLoads, "legs-1": Number(e.target.value) })}
-                      className="w-full bg-gray-900 text-white px-3 py-2 rounded-lg border border-gray-800 text-xs outline-none"
-                    />
-                    <button
-                      onClick={() => triggerToast(`Carga guardada: Sentadilla ${workoutLoads["legs-1"]} kg`)}
-                      className="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-xs"
-                    >
-                      Guardar
-                    </button>
+
+                  <div className="bg-gray-950 p-6 rounded-2xl border border-gray-800 flex flex-col justify-between">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase text-red-400 bg-red-950/50 px-2.5 py-1 rounded-md">CUÁDRICEPS & GLÚTEO</span>
+                      <h3 className="text-lg font-bold text-white mt-2">Sentadilla Hack o Guiada</h3>
+                      <p className="text-xs text-gray-300 mt-1">4 Series × 6-8 Reps (RIR 1)</p>
+                      <p className="text-[11px] text-gray-400 mt-3 bg-gray-900 p-3 rounded-xl border border-gray-800">
+                        <strong>Tip Biomecánico:</strong> Máxima flexión de rodilla con dorsiflexión profunda de tobillos.
+                      </p>
+                    </div>
+                    <div className="mt-4 pt-3 border-t border-gray-900 flex gap-2">
+                      <input
+                        type="number"
+                        placeholder="Carga (kg)"
+                        defaultValue={workoutLoads["legs-1"]}
+                        onChange={(e) => setWorkoutLoads({ ...workoutLoads, "legs-1": Number(e.target.value) })}
+                        className="w-full bg-gray-900 text-white px-3 py-2 rounded-lg border border-gray-800 text-xs outline-none"
+                      />
+                      <button
+                        onClick={() => triggerToast(`Carga guardada: Sentadilla ${workoutLoads["legs-1"]} kg`)}
+                        className="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-xs"
+                      >
+                        Guardar
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <PaywallNotice onGoToCheckout={() => setActiveTab("checkout")} />
+          )
         )}
 
         {/* PESTAÑA 4: TERMINAL COACH SHELL CLI */}
         {activeTab === "coach-shell" && (
-          <div className="space-y-6 animate-in fade-in duration-300">
-            <div className="bg-[#090D16] border border-cyan-900/60 rounded-3xl p-6 shadow-2xl font-mono">
-              <div className="flex items-center justify-between border-b border-cyan-950 pb-4 mb-4">
-                <span className="text-xs text-cyan-400 font-bold flex items-center gap-2">
-                  <Terminal className="w-4 h-4" /> TERMINAL COACH SHELL CLI v3.0
-                </span>
-                <span className="text-[10px] text-gray-500 uppercase">USUARIO: {currentUser.name}</span>
-              </div>
+          hasFullAccess ? (
+            <div className="space-y-6 animate-in fade-in duration-300">
+              <div className="bg-[#090D16] border border-cyan-900/60 rounded-3xl p-6 shadow-2xl font-mono">
+                <div className="flex items-center justify-between border-b border-cyan-950 pb-4 mb-4">
+                  <span className="text-xs text-cyan-400 font-bold flex items-center gap-2">
+                    <Terminal className="w-4 h-4" /> TERMINAL COACH SHELL CLI v3.0
+                  </span>
+                  <span className="text-[10px] text-gray-500 uppercase">USUARIO: {currentUser.name}</span>
+                </div>
 
-              {/* Logs de Consola */}
-              <div className="h-80 overflow-y-auto space-y-2 text-xs bg-black/60 p-4 rounded-xl border border-gray-900 mb-4 font-mono">
-                {terminalLogs.map((log, i) => (
-                  <p key={i} className={log.startsWith("GymOS-Coach>") ? "text-amber-400 font-bold" : log.includes("ÉXITO") ? "text-emerald-400 font-bold" : "text-cyan-300"}>
-                    {log}
-                  </p>
-                ))}
-              </div>
+                {/* Logs de Consola */}
+                <div className="h-80 overflow-y-auto space-y-2 text-xs bg-black/60 p-4 rounded-xl border border-gray-900 mb-4 font-mono">
+                  {terminalLogs.map((log, i) => (
+                    <p key={i} className={log.startsWith("GymOS-Coach>") ? "text-amber-400 font-bold" : log.includes("ÉXITO") ? "text-emerald-400 font-bold" : "text-cyan-300"}>
+                      {log}
+                    </p>
+                  ))}
+                </div>
 
-              {/* Formulario de Entrada */}
-              <form onSubmit={handleTerminalSubmit} className="flex gap-2">
-                <span className="text-amber-400 font-bold text-xs py-2.5">GymOS-Coach&gt;</span>
-                <input
-                  type="text"
-                  value={terminalInput}
-                  onChange={(e) => setTerminalInput(e.target.value)}
-                  placeholder="Escribe 'help', 'checkin list', 'diet generate'..."
-                  className="w-full bg-gray-950 text-cyan-300 px-4 py-2.5 rounded-xl border border-gray-800 text-xs font-mono outline-none focus:border-cyan-500"
-                />
-                <button type="submit" className="bg-cyan-600 hover:bg-cyan-500 text-gray-950 font-black px-5 py-2.5 rounded-xl text-xs uppercase">
-                  Ejecutar
-                </button>
-              </form>
+                {/* Formulario de Entrada */}
+                <form onSubmit={handleTerminalSubmit} className="flex gap-2">
+                  <span className="text-amber-400 font-bold text-xs py-2.5">GymOS-Coach&gt;</span>
+                  <input
+                    type="text"
+                    value={terminalInput}
+                    onChange={(e) => setTerminalInput(e.target.value)}
+                    placeholder="Escribe 'help', 'checkin list', 'diet generate'..."
+                    className="w-full bg-gray-950 text-cyan-300 px-4 py-2.5 rounded-xl border border-gray-800 text-xs font-mono outline-none focus:border-cyan-500"
+                  />
+                  <button type="submit" className="bg-cyan-600 hover:bg-cyan-500 text-gray-950 font-black px-5 py-2.5 rounded-xl text-xs uppercase">
+                    Ejecutar
+                  </button>
+                </form>
+              </div>
             </div>
-          </div>
+          ) : (
+            <PaywallNotice onGoToCheckout={() => setActiveTab("checkout")} />
+          )
         )}
 
         {/* PESTAÑA 5: MEMBRESÍAS ÉLITE & DESBLOQUEO TRAS PAGO PAYPAL */}
