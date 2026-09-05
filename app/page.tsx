@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { 
   Users, DollarSign, Calendar, Dumbbell, Utensils, Flame, Sparkles, 
   ShieldCheck, CheckCircle2, Crown, CreditCard, Activity, FileText, 
@@ -201,7 +202,13 @@ export default function GymOSMainApp() {
         <div className="max-w-7xl mx-auto px-6 py-3.5 flex items-center justify-between gap-4">
           {/* Logo & Marca */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab("dashboard")}>
-            <img src="/img/irahi-reynosa-logo.png" alt="IFA Irahi Reynosa" className="h-10 w-auto object-contain" />
+            <Image 
+              src="/img/irahi-reynosa-logo.png" 
+              alt="IFA Irahi Reynosa" 
+              width={160} 
+              height={40} 
+              className="h-10 w-auto object-contain" 
+            />
             <div>
               <span className="text-base font-serif text-white tracking-wide block leading-none font-bold">
                 IRAHI REYNOSA
@@ -281,9 +288,11 @@ export default function GymOSMainApp() {
           className="absolute inset-0 w-full h-full object-cover opacity-40 filter contrast-125 brightness-90 hero-motion-img"
         />
         {/* Watermark Logo Irahi Reynosa */}
-        <img
+        <Image
           src="/img/irahi-reynosa-logo.png"
           alt="Watermark Logo"
+          width={400}
+          height={400}
           className="absolute inset-0 w-full h-full object-contain opacity-15 pointer-events-none p-12"
         />
         {/* Overlay Degradado Radial y Viñeta Cinemática */}
