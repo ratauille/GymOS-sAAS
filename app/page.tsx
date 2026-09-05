@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { syncUserToFirestore, syncCheckinToFirestore, syncLeadToFirestore } from "@/lib/firebase";
 import { 
   Users, DollarSign, Calendar, Dumbbell, Utensils, Flame, Sparkles, 
   ShieldCheck, CheckCircle2, Crown, CreditCard, Activity, FileText, 
@@ -148,10 +149,11 @@ export default function GymOSMainApp() {
     };
   });
 
-  // Sync to localStorage
+  // Sync to localStorage & Firebase Firestore
   useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("gymos_user", JSON.stringify(currentUser));
+      syncUserToFirestore(currentUser);
     }
   }, [currentUser]);
 
@@ -262,8 +264,9 @@ export default function GymOSMainApp() {
     };
 
     setCheckins([...checkins, newEntry]);
+    syncCheckinToFirestore(newEntry);
     setCurrentUser((prev) => ({ ...prev, weight: newWeight }));
-    triggerToast(`Check-in Semana ${nextWeek} guardado para ${currentUser.name}`);
+    triggerToast(`Check-in Semana ${nextWeek} guardado y sincronizado en la nube`);
   };
 
   // --- COMANDOS TERMINAL COACH SHELL ---
@@ -857,7 +860,20 @@ export default function GymOSMainApp() {
               <h3 className="text-lg font-serif">Captar Lead Élite</h3>
               <button onClick={() => setLeadModalOpen(false)} className="text-gray-400 hover:text-white text-2xl">&times;</button>
             </div>
-            <form onSubmit={(e) => { e.preventDefault(); setLeadModalOpen(false); triggerToast("Lead captado y enviado a CRM de GymOS"); }} className="space-y-3">
+            <form 
+              onSubmit={(e) => { 
+                e.preventDefault(); 
+                const form = e.target as HTMLFormElement;
+                const nameInput = (form.elements[0] as HTMLInputElement)?.value || "Lead Élite";
+                const emailInput = (form.elements[1] as HTMLInputElement)?.value || "";
+                if (emailInput) {
+                  syncLeadToFirestore({ name: nameInput, email: emailInput });
+                }
+                setLeadModalOpen(false); 
+                triggerToast("Lead captado y sincronizado con Firebase Cloud"); 
+              }} 
+              className="space-y-3"
+            >
               <div>
                 <label className="block text-[10px] uppercase font-bold text-gray-300 mb-1">Nombre Completo</label>
                 <input type="text" required placeholder="Carlos Mendoza" className="w-full bg-gray-950 border border-gray-800 px-3 py-2 text-xs rounded-lg text-white" />
