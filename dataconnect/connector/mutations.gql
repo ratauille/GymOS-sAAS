@@ -1,0 +1,30 @@
+# dataconnect/connector/mutations.gql
+
+# Inserción de Gimnasio
+mutation CreateGym($name: String!, $address: String!, $phone: String) @auth(level: PUBLIC) {
+  gym_insert(data: {
+    name: $name
+    address: $address
+    phone: $phone
+  })
+}
+
+# Inserción de Usuario (Cliente / Entrenador)
+mutation CreateUser($id: String!, $email: String!, $fullName: String!, $role: String!, $gymId: UUID!) @auth(level: PUBLIC) {
+  user_insert(data: {
+    id: $id
+    email: $email
+    fullName: $fullName
+    role: $role
+    gymId: $gymId
+  })
+}
+
+# Crear una Reserva de Clase
+mutation CreateBooking($userId: String!, $classId: UUID!) @auth(level: PUBLIC) {
+  booking_insert(data: {
+    userId: $userId
+    classId: $classId
+    status: "confirmed"
+  })
+}

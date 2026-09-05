@@ -1,57 +1,40 @@
-# GymOS Luxury SaaS - Firebase Data Connect GraphQL & PostgreSQL Schema
+# dataconnect/schema/schema.gql
+# Firebase DataConnect Schema para GymOS
 
+# 1. Tabla de Gimnasios (Sede/Sucursal)
 type Gym @table {
   id: UUID! @default(expr: "uuidV4()")
   name: String!
-  slug: String!
-  ownerId: String!
-  createdAt: Timestamp! @default(expr: "request.time")
-}
-
-type Profile @table {
-  id: UUID! @default(expr: "uuidV4()")
-  fullName: String!
-  email: String!
+  address: String!
   phone: String
-  role: String!
-  gymId: UUID
-  createdAt: Timestamp! @default(expr: "request.time")
 }
 
-type Client @table {
-  id: UUID! @default(expr: "uuidV4()")
-  coachId: UUID!
-  fullName: String!
-  age: Int!
-  gender: String!
-  weightKg: Float!
-  heightCm: Float!
-  activityLevel: Float!
-  goal: String!
-  createdAt: Timestamp! @default(expr: "request.time")
-}
-
-type Diet @table {
-  id: UUID! @default(expr: "uuidV4()")
-  clientId: UUID!
-  createdBy: UUID!
-  title: String!
-  dietType: String!
-  targetCalories: Int!
-  proteinGrams: Int!
-  carbGrams: Int!
-  fatGrams: Int!
-  mealsJson: String!
-  createdAt: Timestamp! @default(expr: "request.time")
-}
-
-type Lead @table {
-  id: UUID! @default(expr: "uuidV4()")
-  fullName: String!
+# 2. Tabla de Usuarios (Clientes / Entrenadores)
+type User @table {
+  id: String! @primary # UID de Firebase Authentication
   email: String!
-  phone: String!
-  goal: String!
-  planInterest: String!
-  status: String! @default(value: "Nuevo")
-  createdAt: Timestamp! @default(expr: "request.time")
+  fullName: String!
+  role: String! # "client", "trainer", "admin"
+  gymId: UUID!
+}
+
+# 3. Tabla de Clases / Sesiones de entrenamiento
+type Class @table {
+  id: UUID! @default(expr: "uuidV4()")
+  name: String!
+  description: String
+  capacity: Int!
+  startTime: Timestamp!
+  endTime: Timestamp!
+  trainerId: String!
+  gymId: UUID!
+}
+
+# 4. Tabla de Reservas (Muchos a Muchos)
+type Booking @table {
+  id: UUID! @default(expr: "uuidV4()")
+  userId: String!
+  classId: UUID!
+  bookedAt: Timestamp! @default(expr: "request.time")
+  status: String! @default(value: "confirmed")
 }

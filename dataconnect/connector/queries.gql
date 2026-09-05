@@ -1,24 +1,38 @@
-# GraphQL Queries for GymOS Data Connect
+# dataconnect/connector/queries.gql
 
-query ListGyms @auth(level: PUBLIC) {
-  gyms {
+# Listar todas las clases programadas con datos del entrenador y gimnasio
+query ListClasses @auth(level: PUBLIC) {
+  classes {
     id
     name
-    slug
-    ownerId
-    createdAt
+    description
+    capacity
+    startTime
+    trainer {
+      id
+      fullName
+      email
+    }
+    gym {
+      id
+      name
+      address
+    }
   }
 }
 
-query ListLeadsCRM @auth(level: PUBLIC) {
-  leads {
-    id
-    fullName
-    email
-    phone
-    goal
-    planInterest
+# Obtener reservas de un usuario
+query GetUserBookings($userId: String!) @auth(level: PUBLIC) {
+  bookings(where: { userId: { eq: $userId } }) {
+    class {
+      id
+      name
+      startTime
+      trainer {
+        fullName
+      }
+    }
+    bookedAt
     status
-    createdAt
   }
 }

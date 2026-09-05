@@ -2,6 +2,10 @@
 node_modules/
 .pnpm-store/
 
+# Next.js Build & Static Export
+.next/
+out/
+
 # Local Environment & Secrets
 .env
 .env.local

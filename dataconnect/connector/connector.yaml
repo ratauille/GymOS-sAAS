@@ -1,0 +1,6 @@
+connectorId: "default"
+generate:
+  javascriptSdk:
+    outputDir: "../js/dataconnect-sdk"
+    package: "@gymos/dataconnect"
+    packageJsonDir: "../../"
