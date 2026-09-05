@@ -142,10 +142,25 @@ export default function GymOSMainApp() {
     "“Diseña tu cuerpo con la misma elegancia y rigor con que los grandes maestros construyen el arte.”"
   ];
 
+  // Hero Banner Images State (Soporta cambiar fotos reales de gimnasio)
+  const heroImages = [
+    { src: "/img/hero-banner.png", title: "Banner Oficial Subido" },
+    { src: "/img/hero-banner-2.jpg", title: "Entrenamiento Real de Gimnasio" },
+    { src: "/img/hero-banner.jpg", title: "Equipamiento de Precisión Biomecánica" }
+  ];
+  const [heroIndex, setHeroIndex] = useState(0);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setQuoteIndex((prev) => (prev + 1) % quotes.length);
     }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % heroImages.length);
+    }, 7000);
     return () => clearInterval(timer);
   }, []);
 
@@ -387,21 +402,31 @@ export default function GymOSMainApp() {
         </div>
       </header>
 
-      {/* BANNER PRINCIPAL (FOTO REAL CON MOVIMIENTO DE ZOOM KEN BURNS) */}
-      <section className="relative h-[440px] w-full flex items-center justify-center overflow-hidden border-b-2 border-[#00f2fe]/40 shadow-2xl bg-black">
-        <Image
-          src="/img/hero-banner.jpg"
-          alt="GymOS Fuerza & Entrenamiento Real"
-          fill
-          priority
-          className="object-cover object-center opacity-55 filter contrast-125 brightness-95 hero-motion-img"
-        />
+      {/* BANNER PRINCIPAL (FOTOS REALES DE GIMNASIO CON MOVIMIENTO KEN BURNS & ROTACIÓN AUTOMÁTICA) */}
+      <section className="relative h-[460px] w-full flex items-center justify-center overflow-hidden border-b-2 border-[#00f2fe]/40 shadow-2xl bg-black">
+        {heroImages.map((img, idx) => (
+          <div
+            key={idx}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              heroIndex === idx ? "opacity-65 z-0" : "opacity-0 -z-10"
+            }`}
+          >
+            <Image
+              src={img.src}
+              alt={img.title}
+              fill
+              priority={idx === 0}
+              className="object-cover object-center filter contrast-125 brightness-95 hero-motion-img"
+            />
+          </div>
+        ))}
+
         <Image
           src="/img/irahi-reynosa-logo.png"
           alt="Watermark Logo"
           width={400}
           height={400}
-          className="absolute inset-0 w-full h-full object-contain opacity-15 pointer-events-none p-12"
+          className="absolute inset-0 w-full h-full object-contain opacity-15 pointer-events-none p-12 z-10"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-[#08090B] z-10 pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(8,9,11,0.8)_70%)] z-10 pointer-events-none" />
@@ -428,6 +453,24 @@ export default function GymOSMainApp() {
               />
             ))}
           </div>
+        </div>
+
+        {/* Selector de Foto Real para Cambiar Imágenes en Vivo */}
+        <div className="absolute bottom-4 right-6 z-30 flex items-center gap-2 bg-black/80 p-2 rounded-2xl border border-gray-800 backdrop-blur-md shadow-2xl">
+          <span className="text-[10px] text-gray-400 font-bold uppercase px-2">Foto Gym:</span>
+          {heroImages.map((img, idx) => (
+            <button
+              key={idx}
+              onClick={() => setHeroIndex(idx)}
+              className={`text-[10px] font-bold px-2.5 py-1 rounded-xl transition-all ${
+                heroIndex === idx
+                  ? "bg-[#00f2fe] text-black font-extrabold shadow-[0_0_10px_#00f2fe]"
+                  : "bg-gray-800 text-gray-300 hover:text-white"
+              }`}
+            >
+              Foto {idx + 1}
+            </button>
+          ))}
         </div>
       </section>
 
