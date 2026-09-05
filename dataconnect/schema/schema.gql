@@ -10,12 +10,12 @@ type Gym @table {
 }
 
 # 2. Tabla de Usuarios (Clientes / Entrenadores)
-type User @table {
-  id: String! @primary # UID de Firebase Authentication
+type User @table(key: "id") {
+  id: String! # UID de Firebase Authentication
   email: String!
   fullName: String!
   role: String! # "client", "trainer", "admin"
-  gymId: UUID!
+  gym: Gym!
 }
 
 # 3. Tabla de Clases / Sesiones de entrenamiento
@@ -26,15 +26,15 @@ type Class @table {
   capacity: Int!
   startTime: Timestamp!
   endTime: Timestamp!
-  trainerId: String!
-  gymId: UUID!
+  trainer: User!
+  gym: Gym!
 }
 
 # 4. Tabla de Reservas (Muchos a Muchos)
 type Booking @table {
   id: UUID! @default(expr: "uuidV4()")
-  userId: String!
-  classId: UUID!
+  user: User!
+  class: Class!
   bookedAt: Timestamp! @default(expr: "request.time")
   status: String! @default(value: "confirmed")
 }
