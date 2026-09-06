@@ -1,4 +1,5 @@
 # dataconnect/schema/schema.gql
+# Firebase DataConnect Schema para GymOS
 
 # 1. Tabla de Gimnasios (Sede/Sucursal)
 type Gym @table {
@@ -16,6 +17,11 @@ type User @table {
   role: String! # Ej: "client", "trainer", "admin"
   
   # Relación: Un usuario pertenece a un gimnasio principal
+type User @table(key: "id") {
+  id: String! # UID de Firebase Authentication
+  email: String!
+  fullName: String!
+  role: String! # "client", "trainer", "admin"
   gym: Gym!
 }
 
@@ -39,4 +45,16 @@ type Booking @table(key: ["user", "class"]) {
   class: Class!
   bookedAt: Timestamp! @default(expr: "request.time")
   status: String! @default(value: "confirmed") # Ej: "confirmed", "cancelled"
+  endTime: Timestamp!
+  trainer: User!
+  gym: Gym!
+}
+
+# 4. Tabla de Reservas (Muchos a Muchos)
+type Booking @table {
+  id: UUID! @default(expr: "uuidV4()")
+  user: User!
+  class: Class!
+  bookedAt: Timestamp! @default(expr: "request.time")
+  status: String! @default(value: "confirmed")
 }

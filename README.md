@@ -1,80 +1,66 @@
-# 👑 GymOS — Luxury Edition (SaaS Multi-tenant PWA)
+# 👑 GymOS — Luxury Performance SaaS Edition
 
-> **Plataforma Web de Rendimiento Físico, Nutrición Científica con Gramajes Exactos y Gestión Multi-Gimnasio.**
+> **Plataforma Integral de Gestión de Gimnasios, Nutrición Científica de Alta Precisión y Entrenamiento Biomecánico Élite.**
 
 ![GymOS Banner](https://img.shields.io/badge/GymOS-Luxury%20Performance-0F2C59?style=for-the-badge&logo=appveyor)
-![Stack](https://img.shields.io/badge/Stack-VanillaJS%20%7C%20Supabase%20%7C%20PWA-D4AF37?style=for-the-badge)
-![License](https://img.shields.io/badge/License-Commercial-059669?style=for-the-badge)
+![Next.js](https://img.shields.io/badge/Next.js-14.2.35-black?style=for-the-badge&logo=next.js)
+![Tailwind](https://img.shields.io/badge/Tailwind-3.4.10-06B6D4?style=for-the-badge&logo=tailwindcss)
+![Firebase](https://img.shields.io/badge/Firebase-App%20Hosting%20%7C%20DataConnect-FFCA28?style=for-the-badge&logo=firebase)
+![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase)
 
 ---
 
-## 🌟 Características Principales
+## 🌟 Arquitectura & Módulos Élite
 
-1. **Diseño de Ultra Lujo & UI/UX**:
-   - Fondo blanco profundo (`#FAFAFA` – `#FFFFFF`) con acentos en **Azul Cobalto Oscuro** (`#0F2C59`).
-   - Encabezados elegantes en tipografía **Belleza** y cuerpo en **Plus Jakarta Sans**.
-   - Hero cinematográfico con carrusel motivacional en *fade-in/fade-out*.
+### 1. 🏋️ Módulo 1: Rutinas Biomecánicas & Tracker de Cargas (`WorkoutSection`)
+- Divisiones de entrenamiento estructuradas: **Push** (Pecho/Hombro), **Pull** (Espalda/Bíceps) y **Legs** (Pierna/Glúteo).
+- Fichas técnicas con **Tips Biomecánicos de Alta Precisión** (vectores de fuerza, contracción y postura).
+- Registro interactivo de cargas levantadas en kilogramos.
 
-2. **Motor Nutricional (TDEE & Gramajes Exactos)**:
-   - Calculadora metabólica basada en Mifflin-St Jeor.
-   - Genera 5 comidas diarias indicando **gramajes exactos por alimento** según calorías y macros objetivo.
-   - Opciones: Omnívora, Pescetariana, Vegetariana, Low Carb.
+### 2. 🥗 Módulo 2: Gastronomía Fitness & Fichas PDF (`NutritionSection`)
+- Catálogo de recetas de autor con **gramajes exactos** y desglose macrobiótico (Kcal, Proteína, Carbos, Grasas).
+- Modal interactivo con generador y vista previa de **Fichas Técnicas descargables en PDF**.
 
-3. **Generador de Rutinas & Biomecánica**:
-   - Divisiones de 3, 4 y 5 días estructuradas por grupos musculares.
-   - Incluye series, repeticiones, RIR, descansos y **tips técnicos de postura biomecánica**.
-   - Registro interactivo de cargas levantadas (kg).
+### 3. 📊 Módulo 3: CRM Dashboard & Pasarela PayPal (`CrmDashboard`)
+- Grid de métricas en tiempo real (Miembros Activos 1,240, Clases de Hoy 8, Ingresos $3,420 USD).
+- Tabla de **Prospectos CRM** (Estado: *Nuevo*, *Contactado*, *Suscrito VIP*).
+- Checkout instantáneo de membresías mediante el **SDK de PayPal**.
 
-4. **Terminal Coach Shell CLI & Logros Verificables**:
-   - Consola interactiva para entrenadores (`node gymos_coach_shell.js` o terminal web).
-   - Evaluación automática de **logros por tiempo** (*Adherencia Élite, Sobrecarga Progresiva, Recomposición Corporal, Consistencia*).
-
-5. **Backend Cloud Supabase Multi-tenant**:
-   - Aislamiento seguro por gimnasio (`gym_id`) mediante Row Level Security (RLS) en PostgreSQL.
-
-6. **PWA Instalable en iOS & Android**:
-   - `manifest.json` y `sw.js` (Service Worker) para instalación nativa sin pasar por las tiendas de aplicaciones.
-
-7. **Pasarela de Pagos PayPal Checkout**:
-   - Integración nativa con SDK de PayPal para planes semanales, mensuales o licencias comerciales.
+### 4. 🌐 Módulo 4: Vincular Dominio Personalizado & Cloud Infra (`DomainGuide`)
+- Guía técnica paso a paso para asignación de registros DNS A/CNAME en `gymos.app`.
+- Certificados SSL automáticos en **Firebase App Hosting** y **Cloud Run**.
 
 ---
 
-## 🚀 Instalación & Inicio Rápido
+## 🚀 Despliegue & Ejecución Local
 
-### 1. Clonar el Repositorio
+### 1. Clonar e Instalar Dependencias
 ```bash
-git clone https://github.com/TU_USUARIO/GymOS-SaaS.git
-cd GymOS-SaaS
+git clone https://github.com/ratauille/GymOS-sAAS.git
+cd GymOS-sAAS
+npm install
 ```
 
-### 2. Ejecutar la Aplicación Web
-Simplemente abre `index.html` en tu navegador o sírvelo mediante cualquier servidor estático:
+### 2. Compilación de Producción
 ```bash
-npx serve .
+npm run build
 ```
 
-### 3. Ejecutar la Terminal CLI del Entrenador
+### 3. Servir Localmente (SSR / Dev)
 ```bash
-node gymos_coach_shell.js
+npm run dev
 ```
 
 ---
 
-## 🗄️ Configuración de Supabase (PostgreSQL Multi-Tenant)
+## ☁️ Infraestructura Multi-Cloud
 
-1. Abre tu proyecto en [Supabase](https://supabase.com).
-2. Ve al **SQL Editor** y ejecuta el script [supabase_schema.sql](file:///c:/Users/frank/Downloads/pagina%20chef4you%20nueva/GymOS/supabase_schema.sql).
-3. Configura tus llaves en `js/supabase-client.js`.
-
----
-
-## 💰 Modelo de Precios Comercial SaaS
-
-- **Plan Coach**: **$999 MXN / mes** ($55 USD)
-- **Plan Gimnasio Pro**: **$2,499 MXN / mes** ($135 USD)
-- **Plan Cadena Élite**: **$4,999 MXN / mes** ($270 USD)
+- **Firebase App Hosting**: Backend SSR con Next.js 14 ejecutándose en Google Cloud Run (`godotiti1983`, `us-central1`).
+- **Firebase Data Connect**: Servicio GraphQL conectado a Cloud SQL PostgreSQL 15/16 (`gymos-saas-service`).
+- **Firestore Real-time DB**: Gestión de leads y sincronización en vivo (`firestore.rules`).
+- **Supabase**: Conector PostgreSQL SSR con RLS habilitado.
+- **GitHub Actions CI/CD**: Pipeline automatizado en `.github/workflows/deploy.yml` para despliegue directo.
 
 ---
 
-© 2026 GymOS Luxury Edition. Todos los derechos reservados.
+© 2026 GymOS Luxury Edition | IFA Irahi Reynosa. Todos los derechos reservados.

@@ -1,0 +1,24 @@
+{
+  "name": "GymOS Luxury Performance & Precision Nutrition",
+  "short_name": "GymOS",
+  "description": "Plataforma web de entrenamiento de élite, nutrición de precisión y seguimiento de logros verificables.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FAFAFA",
+  "theme_color": "#0F2C59",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%230F2C59' rx='100'/%3E%3Cpath fill='%23FFFFFF' d='M160 160h192v48H160zm0 96h192v48H160zm0 96h120v48H160z'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%230F2C59' rx='100'/%3E%3Cpath fill='%23FFFFFF' d='M160 160h192v48H160zm0 96h192v48H160zm0 96h120v48H160z'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
