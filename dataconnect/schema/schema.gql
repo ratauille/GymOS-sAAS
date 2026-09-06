@@ -10,6 +10,13 @@ type Gym @table {
 }
 
 # 2. Tabla de Usuarios (Clientes / Entrenadores)
+type User @table {
+  id: String! # UID de Firebase Authentication
+  email: String!
+  fullName: String!
+  role: String! # Ej: "client", "trainer", "admin"
+  
+  # Relación: Un usuario pertenece a un gimnasio principal
 type User @table(key: "id") {
   id: String! # UID de Firebase Authentication
   email: String!
@@ -25,6 +32,19 @@ type Class @table {
   description: String
   capacity: Int!
   startTime: Timestamp!
+  
+  # Relación N-1: Una clase tiene un entrenador (User con rol "trainer")
+  trainer: User!
+  # Relación N-1: Una clase pertenece a un gimnasio
+  gym: Gym!
+}
+
+# 4. Tabla de Reservas (Relación muchos a muchos con clave compuesta)
+type Booking @table(key: ["user", "class"]) {
+  user: User!
+  class: Class!
+  bookedAt: Timestamp! @default(expr: "request.time")
+  status: String! @default(value: "confirmed") # Ej: "confirmed", "cancelled"
   endTime: Timestamp!
   trainer: User!
   gym: Gym!
